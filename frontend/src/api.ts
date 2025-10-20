@@ -5,7 +5,7 @@ export const rateFacility = (facilityId: string, rating: number, comment: string
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://quick-court-wrx0.onrender.com/api", // your backend URL',
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://quick-court-wrx0.onrender.com", // your backend URL',
 });
 
 // Add request interceptor to include token in all requests
