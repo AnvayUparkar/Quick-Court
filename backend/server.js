@@ -28,6 +28,7 @@ const allowedOrigins = [
     'https://quick-court-beige.vercel.app',
     'https://quick-court-wrx0.onrender.com',
     'https://quick-court-beige.vercel.app',
+    'https://quick-court-anvaymuparkar-5452s-projects.vercel.app',
   ];
 app.use(cors({
     origin: allowedOrigins,
