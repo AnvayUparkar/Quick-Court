@@ -62,6 +62,17 @@ app.use((error, req, res, next) => {
     });
 });
 
+// This middleware will catch any response that might not be a string and stringify it
+// This is a last resort to prevent Vercel's BODY_NOT_A_STRING_FROM_FUNCTION error
+app.use((req, res, next) => {
+    if (typeof res.body === 'object' && res.body !== null && !res.headersSent) {
+        res.set('Content-Type', 'application/json');
+        res.send(JSON.stringify(res.body));
+    } else {
+        next();
+    }
+});
+
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
