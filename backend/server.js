@@ -21,13 +21,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000', 'https://quickcourt.vercel.app'],
-  credentials: true,
-  exposedHeaders: ['x-rth-fingerprint-id'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-rth-fingerprint-id']
-}));
-
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://quick-court-six.vercel.app', // ✅ your current deployed frontend
+    ],
+    credentials: true,
+    exposedHeaders: ['x-rth-fingerprint-id'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-rth-fingerprint-id'],
+  }));
+  
 // Mount Routes
 app.use('/api/razorpay', razorpayRoutes);
 
