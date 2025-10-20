@@ -117,7 +117,7 @@ const Dashboard = () => {
             Book Venues
           </Link>
           <div className="space-y-4">
-            {recommendedCourts.slice(0, 2).map((facility) => (
+            {recommendedCourts.map((facility) => (
               <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <img
                   src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/300')}
@@ -135,9 +135,8 @@ const Dashboard = () => {
                       <StarIcon className="h-4 w-4 text-yellow-400" />
                       <span className="text-sm font-medium">4.5</span>
                     </div>
-                    <span className="font-semibold text-indigo-600">View Courts</span>
+                    <Link to={`/booking/${facility._id}`} className="font-semibold text-indigo-600">Book Now</Link>
                   </div>
-                  <Link to={`/venue/${facility._id}`} className="absolute inset-0"></Link>
                 </div>
               </div>
             ))}

@@ -165,7 +165,7 @@ const CourtListing = () => {
                       <img
                         src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/400')}
                         alt={facility.name}
-                        className="w-full h-48 object-cover"
+                        className="w-full h-32 md:h-48 object-cover"
                       />
                       <div className="p-4">
                         <h3 className="font-semibold text-gray-900 mb-1">{facility.name}</h3>
