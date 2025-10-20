@@ -20,12 +20,17 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    /\.vercel\.app$/,  // allow any Vercel deployment
+    'https://quick-court-beige.vercel.app',
+    'https://quick-court-wrx0.onrender.com',
+    'https://quick-court-beige.vercel.app',
+  ];
 app.use(cors({
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:3000',
-      'https://quick-court-beige.vercel.app/', // ✅ your current deployed frontend
-    ],
+    origin: allowedOrigins,
     credentials: true,
     exposedHeaders: ['x-rth-fingerprint-id'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
