@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const API_URL = 'http://localhost:8000/api/auth'; 
+    const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`; 
 
   useEffect(() => {
         const loadUser = async () => {

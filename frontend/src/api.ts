@@ -1,11 +1,11 @@
 // Facility Rating API call
 export const rateFacility = (facilityId: string, rating: number, comment: string) =>
-  api.post(`/facilities/${facilityId}/rate`, { rating, comment });
+  api.post(`/api/facilities/${facilityId}/rate`, { rating, comment });
 // api.js or api.ts - Create this file if it doesn't exist
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://quick-court-wrx0.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
 });
 
 // Add request interceptor to include token in all requests
@@ -51,27 +51,27 @@ api.interceptors.response.use(
 
 export default api;
 
-export const deleteBooking = (bookingId: string) => api.delete(`/bookings/${bookingId}`);
+export const deleteBooking = (bookingId: string) => api.delete(`/api/bookings/${bookingId}`);
 
 // Facility Management API calls
-export const getOwnerFacilities = (ownerId: string) => api.get(`/facilities/owner/${ownerId}`);
-export const createFacility = (facilityData: FormData) => api.post('/facilities', facilityData, {
+export const getOwnerFacilities = (ownerId: string) => api.get(`/api/facilities/owner/${ownerId}`);
+export const createFacility = (facilityData: FormData) => api.post('/api/facilities', facilityData, {
   headers: {
     'Content-Type': 'multipart/form-data',
   },
 });
-export const updateFacility = (id: string, facilityData: FormData) => api.put(`/facilities/${id}`, facilityData, {
+export const updateFacility = (id: string, facilityData: FormData) => api.put(`/api/facilities/${id}`, facilityData, {
   headers: {
     'Content-Type': 'multipart/form-data',
   },
 });
-export const deleteFacility = (id: string) => api.delete(`/facilities/${id}`);
+export const deleteFacility = (id: string) => api.delete(`/api/facilities/${id}`);
 
 // Court Management API calls
-export const getFacilityCourts = (facilityId: string) => api.get(`/facilities/${facilityId}/courts`);
-export const getCourtDetails = (facilityId: string, courtId: string) => api.get(`/facilities/${facilityId}/courts/${courtId}`);
-export const addCourt = (facilityId: string, courtData: any) => api.post(`/facilities/${facilityId}/courts`, courtData);
-export const updateCourt = (facilityId: string, courtId: string, courtData: any) => api.put(`/facilities/${facilityId}/courts/${courtId}`, courtData);
-export const deleteCourt = (facilityId: string, courtId: string) => api.delete(`/facilities/${facilityId}/courts/${courtId}`);
-export const addTimeSlot = (facilityId: string, courtId: string, slotData: any) => api.post(`/facilities/${facilityId}/courts/${courtId}/slots`, slotData);
-export const removeTimeSlot = (facilityId: string, courtId: string, slotId: string) => api.delete(`/facilities/${facilityId}/courts/${courtId}/slots/${slotId}`);
+export const getFacilityCourts = (facilityId: string) => api.get(`/api/facilities/${facilityId}/courts`);
+export const getCourtDetails = (facilityId: string, courtId: string) => api.get(`/api/facilities/${facilityId}/courts/${courtId}`);
+export const addCourt = (facilityId: string, courtData: any) => api.post(`/api/facilities/${facilityId}/courts`, courtData);
+export const updateCourt = (facilityId: string, courtId: string, courtData: any) => api.put(`/api/facilities/${facilityId}/courts/${courtId}`, courtData);
+export const deleteCourt = (facilityId: string, courtId: string) => api.delete(`/api/facilities/${facilityId}/courts/${courtId}`);
+export const addTimeSlot = (facilityId: string, courtId: string, slotData: any) => api.post(`/api/facilities/${facilityId}/courts/${courtId}/slots`, slotData);
+export const removeTimeSlot = (facilityId: string, courtId: string, slotId: string) => api.delete(`/api/facilities/${facilityId}/courts/${courtId}/slots/${slotId}`);

@@ -51,7 +51,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Fetch reviews from backend
   const fetchReviews = useCallback(async () => {
     try {
-      const response = await api.get('/reviews');
+      const response = await api.get('/api/reviews');
       setReviews(response.data.data);
     } catch (err: any) {
       console.error('Error fetching reviews:', err);
@@ -69,7 +69,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
     try {
-      const response = await api.get(`/facilities/owner/${user._id}/dashboard-stats`);
+      const response = await api.get(`/api/facilities/owner/${user._id}/dashboard-stats`);
       setOwnerStats(response.data.data);
     } catch (err: any) {
       setOwnerStats(null);
@@ -109,7 +109,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchFacilities = useCallback(async () => {
     try {
-      const response = await api.get('/facilities');
+      const response = await api.get('/api/facilities');
       setFacilities(response.data.data);
       // Also fetch all courts from these facilities for general use
       const allCourts: Court[] = [];
@@ -128,7 +128,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchCourtsForFacility = useCallback(async (facilityId: string) => {
     try {
-      const response = await api.get(`/facilities/${facilityId}/courts`);
+      const response = await api.get(`/api/facilities/${facilityId}/courts`);
       return response.data.data;
     } catch (err: any) {
       console.error(`Failed to fetch courts for facility ${facilityId}:`, err);
@@ -145,7 +145,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       console.log('Fetching admin stats for user:', user.role);
-      const response = await api.get('/admin/dashboard-stats');
+      const response = await api.get('/api/admin/dashboard-stats');
       setAdminStats(response.data.data);
     } catch (err: any) {
       console.error('Error fetching admin stats:', err);
@@ -172,7 +172,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      const response = await api.get('/bookings/owner'); // Corrected endpoint
+      const response = await api.get('/api/bookings/owner'); // Corrected endpoint
       setOwnerBookings(response.data.data);
     } catch (err: any) {
       console.error('Error fetching owner bookings:', err);
@@ -220,7 +220,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const createBooking = useCallback(async (bookingData: BookingPayload) => {
     try {
-      const response = await api.post('/bookings', bookingData);
+      const response = await api.post('/api/bookings', bookingData);
       return response.data;
     } catch (err: any) {
       console.error('Error creating booking:', err);

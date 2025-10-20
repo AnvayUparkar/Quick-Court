@@ -100,7 +100,7 @@ exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
     console.log('Login attempt for email:', email);
-    console.log('Password received:', password);
+    console.log('Password received:', "[REDACTED]"); // Mask password for logs
 
     // Check for user and verified status
     const user = await User.findOne({ email });
