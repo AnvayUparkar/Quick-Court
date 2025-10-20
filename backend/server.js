@@ -24,7 +24,7 @@ app.use(cors({
     origin: [
       'http://localhost:5173',
       'http://localhost:3000',
-      'https://quick-court-six.vercel.app', // ✅ your current deployed frontend
+      'https://quick-court-beige.vercel.app/', // ✅ your current deployed frontend
     ],
     credentials: true,
     exposedHeaders: ['x-rth-fingerprint-id'],
