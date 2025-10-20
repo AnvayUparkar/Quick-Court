@@ -201,7 +201,6 @@ const BookingScreen = () => {
             <div className="flex items-center space-x-2">
               <UserIcon className="h-6 w-6 text-gray-600" />
               <span className="text-sm text-gray-700">{user?.name}</span>
-           <span className="text-sm text-gray-700">{user?.name}</span>
             </div>
           </div>
         </div>
@@ -346,7 +345,7 @@ const BookingScreen = () => {
                         key={index}
                         onClick={() => handleDateSelect(date)}
                         disabled={!date || date < new Date()}
-                        className={`p-2 text-sm rounded-lg transition duration-200 ${
+                        className={`p-2 text-sm rounded-lg transition duration-200 aspect-square flex items-center justify-center ${
                           !date
                             ? "invisible"
                             : date < new Date()
