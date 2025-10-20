@@ -34,3 +34,15 @@ exports.rateFacility = catchAsync(async (req, res, next) => {
     const review = await Review.create({ facilityId, userId, rating, comment });
     res.status(201).json({ success: true, message: 'Review added.', data: review });
 });
+
+// @desc    Get all reviews
+// @route   GET /api/reviews
+// @access  Public
+exports.getReviews = catchAsync(async (req, res, next) => {
+    const reviews = await Review.find().populate('user', 'name');
+    res.status(200).json({
+        success: true,
+        count: reviews.length,
+        data: reviews
+    });
+});

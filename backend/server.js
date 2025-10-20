@@ -45,7 +45,9 @@ app.use('/api/razorpay', razorpayRoutes);
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/facilities', require('./routes/facilityRoutes'));
+
 app.use('/api/bookings', require('./routes/bookingRoutes'));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/courts', require('./routes/courtRoutes')); // Mount court routes
 app.use('/api/admin', require('./routes/adminRoutes'));
 
