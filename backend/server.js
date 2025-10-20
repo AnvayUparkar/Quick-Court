@@ -83,6 +83,12 @@ app.use((req, res, next) => {
     }
 });
 
+// Fallback logger for debugging unhandled routes
+app.use((req, res, next) => {
+  console.warn('⚠️ Unhandled route:', req.method, req.originalUrl);
+  res.status(404).json({ message: 'Route not found', path: req.originalUrl });
+});
+
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {

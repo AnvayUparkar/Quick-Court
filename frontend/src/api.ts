@@ -53,6 +53,8 @@ export default api;
 
 export const deleteBooking = (bookingId: string) => api.delete(`/api/bookings/${bookingId}`);
 
+export const getAllFacilities = () => api.get(`/api/facilities`);
+
 // Facility Management API calls
 export const getOwnerFacilities = (ownerId: string) => api.get(`/api/facilities/owner/${ownerId}`);
 export const createFacility = (facilityData: FormData) => api.post('/api/facilities', facilityData, {
