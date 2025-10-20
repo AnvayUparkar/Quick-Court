@@ -16,15 +16,10 @@ const CourtListing = () => {
     location: '',
   });
   const [sortBy, setSortBy] = useState('Relevance');
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   useEffect(() => {
     fetchFacilities();
   }, [fetchFacilities]);
-
-  const toggleMobileFilter = () => {
-    setIsMobileFilterOpen(!isMobileFilterOpen);
-  };
 
   // Filter facilities based on search query and filters
   let filteredFacilities = facilities.filter(facility => {
@@ -82,17 +77,9 @@ const CourtListing = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Sports Venues in Ahmedabad</h1>
         <p className="text-gray-600 mb-6">Discover and Book Nearby Venues</p>
-        <div className="flex md:hidden justify-end mb-4">
-          <button
-            onClick={toggleMobileFilter}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-blue-700 transition"
-          >
-            {isMobileFilterOpen ? 'Close Filters' : 'Open Filters'}
-          </button>
-        </div>
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar Filters */}
-          <aside className={`md:w-1/4 bg-white rounded-lg shadow-md p-6 mb-8 ${isMobileFilterOpen ? 'block absolute w-full md:relative' : 'hidden md:block'}`}>
+          <aside className="md:w-1/4 bg-white rounded-lg shadow-md p-6 mb-8">
             <h2 className="text-lg font-bold mb-4">Filters</h2>
             <div className="space-y-4">
               <div>
@@ -133,15 +120,7 @@ const CourtListing = () => {
                   <option value="4.5">4.5+</option>
                 </select>
               </div>
-              <button
-                onClick={() => {
-                  setFilters({ sport: 'All Sports', venueType: 'All', priceRange: 'Any Price', rating: 'Any Rating', location: '' });
-                  toggleMobileFilter(); // Close filter on clear
-                }}
-                className="w-full bg-red-600 text-white py-2 rounded mt-2"
-              >
-                Clear Filters
-              </button>
+              <button onClick={() => setFilters({ sport: 'All Sports', venueType: 'All', priceRange: 'Any Price', rating: 'Any Rating', location: '' })} className="w-full bg-red-600 text-white py-2 rounded mt-2">Clear Filters</button>
             </div>
           </aside>
           {/* Main Venue Grid */}
@@ -158,9 +137,9 @@ const CourtListing = () => {
                 />
                 <button type="submit" className="bg-gradient-to-r from-blue-500 via-green-500 to-green-600 text-white px-6 py-2 rounded-md font-semibold shadow-md hover:from-blue-600 hover:to-green-700 transition">Search</button>
               </form>
-              <div className="w-full md:w-auto">
+              <div>
                 <label className="mr-2 text-sm font-medium text-gray-700">Sort by:</label>
-                <select value={sortBy} onChange={handleSortChange} className="border-gray-300 rounded-md w-full md:w-auto">
+                <select value={sortBy} onChange={handleSortChange} className="border-gray-300 rounded-md">
                   <option value="Relevance">Relevance</option>
                   <option value="Price Low to High">Price Low to High</option>
                   <option value="Price High to Low">Price High to Low</option>
