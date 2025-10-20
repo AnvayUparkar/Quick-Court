@@ -53,15 +53,17 @@ exports.createBooking = catchAsync(async (req, res, next) => {
 
     // Add booking to user's bookings
     const user = await User.findById(req.user.id);
-    console.log('createBooking: Found user for updating bookings:', user.email);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
     user.bookings.push(booking._id);
     await user.save();
-    console.log('createBooking: Booking added to user\'s profile.');
+    console.log('createBooking: Booking added to user profile.');
 
     res.status(201).json({
         success: true,
         message: 'Booking created successfully',
-        data: booking
+        booking
     });
 });
 
