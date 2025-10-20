@@ -20,7 +20,14 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+// Handle double /api/api/... prefixes gracefully
+app.use('/api/api', (req, res, next) => {
+    const newUrl = req.originalUrl.replace('/api/api', '/api');
+    console.log('🔁 Redirecting double API path ->', newUrl);
+    req.url = newUrl;
+    next();
+  });
+  
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
