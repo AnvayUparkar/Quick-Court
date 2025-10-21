@@ -34,7 +34,7 @@ async function sendEmail(to, subject, htmlContent) {
         sendSmtpEmail.htmlContent = htmlContent;
 
         const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log('✅ General email sent successfully via Brevo API:', response);
+        console.log(`✅ Email sent! Message ID: ${response.body.messageId}`);
         return response;
     } catch (error) {
         console.error('❌ Error sending general email via Brevo API:', error);
@@ -72,7 +72,7 @@ async function sendOtpEmail(to, otp) {
         sendSmtpEmail.htmlContent = otpHtmlContent;
 
         const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log('✅ OTP email sent successfully via Brevo API:', response);
+        console.log(`✅ Email sent! Message ID: ${response.body.messageId}`);
         return response;
     } catch (error) {
         console.error('❌ Error sending OTP email via Brevo API:', error);
