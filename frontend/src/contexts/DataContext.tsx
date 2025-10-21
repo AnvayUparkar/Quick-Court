@@ -238,7 +238,12 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const createReview = useCallback(async (reviewData: ReviewPayload) => {
+    if (!token) {
+      console.error('Error creating review: No authentication token found.');
+      throw new Error('Authentication required to create a review.');
+    }
     try {
+      console.log('Creating review with token:', token);
       await api.post('/api/reviews', reviewData, { headers: { Authorization: `Bearer ${token}` } });
       // Optionally re-fetch all reviews or specifically for the facility
       fetchReviews();
