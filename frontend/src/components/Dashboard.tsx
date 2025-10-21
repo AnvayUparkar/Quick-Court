@@ -42,7 +42,7 @@ function ImageScroller({ images }: { images: string[] }) {
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { facilities, fetchFacilities } = useData(); // Get facilities and fetchFacilities from DataContext
+  const { facilities, fetchFacilities, reviews: globalReviews } = useData(); // Get facilities, fetchFacilities, and globalReviews from DataContext
 
   useEffect(() => {
     fetchFacilities(); // Fetch facilities when the component mounts
@@ -117,29 +117,35 @@ const Dashboard = () => {
             Book Venues
           </Link>
           <div className="space-y-4">
-            {recommendedCourts.map((facility) => (
-              <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img
-                  src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/300')}
-                  alt={facility.name}
-                  className="w-full h-32 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900">{facility.name}</h3>
-                  <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
-                    <MapPinIcon className="h-4 w-4" />
-                    <span>{facility.location.address}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1">
-                      <StarIcon className="h-4 w-4 text-yellow-400" />
-                      <span className="text-sm font-medium">4.5</span>
+            {recommendedCourts.map((facility) => {
+              const facilityReviews = globalReviews ? globalReviews.filter((r: any) => r.facilityId === facility._id) : [];
+              const avgRating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
+              const reviewCount = facilityReviews.length;
+
+              return (
+                <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <img
+                    src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/300')}
+                    alt={facility.name}
+                    className="w-full h-32 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900">{facility.name}</h3>
+                    <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
+                      <MapPinIcon className="h-4 w-4" />
+                      <span>{facility.location.address}</span>
                     </div>
-                    <Link to={`/venue/${facility._id}`} className="font-semibold text-indigo-600">View Courts</Link>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-1">
+                        <StarIcon className="h-4 w-4 text-yellow-400" />
+                        <span className="text-sm font-medium">{avgRating > 0 ? `${avgRating.toFixed(1)} (${reviewCount})` : `0.0 (${reviewCount})`}</span>
+                      </div>
+                      <Link to={`/venue/${facility._id}`} className="font-semibold text-indigo-600">View Courts</Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -193,33 +199,39 @@ const Dashboard = () => {
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {recommendedCourts.map((facility) => (
-                <Link
-                  key={facility._id}
-                  to={`/venue/${facility._id}`}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200 hover:border-2 hover:border-indigo-600"
-                >
-                  <img
-                    src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/400')}
-                    alt={facility.name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-2">{facility.name}</h3>
-                    <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
-                      <MapPinIcon className="h-4 w-4" />
-                      <span>{facility.location.address}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1">
-                        <StarIcon className="h-4 w-4 text-yellow-400" />
-                        <span className="text-sm font-medium">4.5</span> {/* Placeholder rating */}
+              {recommendedCourts.map((facility) => {
+                const facilityReviews = globalReviews ? globalReviews.filter((r: any) => r.facilityId === facility._id) : [];
+                const avgRating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
+                const reviewCount = facilityReviews.length;
+
+                return (
+                  <Link
+                    key={facility._id}
+                    to={`/venue/${facility._id}`}
+                    className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200 hover:border-2 hover:border-indigo-600"
+                  >
+                    <img
+                      src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/400')}
+                      alt={facility.name}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900 mb-2">{facility.name}</h3>
+                      <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
+                        <MapPinIcon className="h-4 w-4" />
+                        <span>{facility.location.address}</span>
                       </div>
-                      <span className="font-semibold text-indigo-600">View Courts</span> {/* Changed from price */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1">
+                          <StarIcon className="h-4 w-4 text-yellow-400" />
+                          <span className="text-sm font-medium">{avgRating > 0 ? `${avgRating.toFixed(1)} (${reviewCount})` : `0.0 (${reviewCount})`}</span> {/* Placeholder rating */}
+                        </div>
+                        <span className="font-semibold text-indigo-600">View Courts</span> {/* Changed from price */}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </section>
 

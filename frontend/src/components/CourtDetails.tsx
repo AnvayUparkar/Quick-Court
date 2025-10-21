@@ -36,9 +36,10 @@ const CourtDetails = () => {
   const { id } = useParams<{ id: string }>(); // This `id` is actually facilityId
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { facilities, fetchFacilities } = useData();
+  const { facilities, fetchFacilities, fetchReviewsForFacility } = useData();
   const [facility, setFacility] = useState<Facility | null>(null);
   const [court, setCourt] = useState<Court | null>(null);
+  const [reviews, setReviews] = useState<any[]>([]); // State to store reviews for this facility
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,9 +59,9 @@ const CourtDetails = () => {
           // For now, let's display the first court of the facility.
           if (foundFacility.courts && foundFacility.courts.length > 0) {
             setCourt(foundFacility.courts[0]);
-          } else {
-            setCourt(null);
           }
+          const fetchedReviews = await fetchReviewsForFacility(foundFacility._id);
+          setReviews(fetchedReviews);
         } else {
           setError("Facility not found");
         }
@@ -71,13 +72,16 @@ const CourtDetails = () => {
       }
     };
     getFacilityAndCourtDetails();
-  }, [id, facilities, fetchFacilities]);
+  }, [id, facilities, fetchFacilities, fetchReviewsForFacility]);
 
   const handleBookVenue = () => {
     if (!user || !facility || !court) return;
     // Assuming a single court for this simplified CourtDetails page
     navigate(`/venue-booking/${facility._id}/court/${court._id}`);
   };
+
+  const avgRating = reviews.length > 0 ? (reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length) : 0;
+  const reviewCount = reviews.length;
 
   if (loading) return <div className="text-center py-10">Loading court details...</div>;
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
@@ -134,7 +138,7 @@ const CourtDetails = () => {
                   <div className="flex items-center space-x-1">
                     <StarIcon className="h-4 w-4 text-yellow-400" />
                     <span className="font-medium">
-                      4.5 (Needs Review Integration)
+                      {avgRating > 0 ? `${avgRating.toFixed(1)} (${reviewCount} Reviews)` : `0.0 (${reviewCount} Reviews)`}
                     </span>
                   </div>
                 </div>
@@ -233,8 +237,22 @@ const CourtDetails = () => {
               {/* Player Reviews & Ratings */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-6">Player Reviews & Ratings</h3>
-                <p className="text-gray-600">Review integration pending.</p>
-                {/* This section will need to fetch reviews from the backend */}
+                {reviews.length > 0 ? (
+                  <div className="space-y-4">
+                    {reviews.map((review) => (
+                      <div key={review._id} className="bg-gray-100 p-4 rounded-lg">
+                        <div className="flex items-center mb-2">
+                          <StarIcon className="h-5 w-5 text-yellow-400 mr-2" />
+                          <span>{review.rating.toFixed(1)}</span>
+                        </div>
+                        <p className="text-gray-800">"{review.comment}"</p>
+                        <p className="text-gray-600 text-sm mt-2">By {review.userId.name} on {new Date(review.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600">No reviews yet for this facility.</p>
+                )}
               </div>
             </div>
 

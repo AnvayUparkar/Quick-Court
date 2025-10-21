@@ -191,7 +191,7 @@ const PlayerProfiles = () => {
                     <div className="text-center">
                       <div className="flex items-center justify-center space-x-1">
                         <StarIcon className="h-4 w-4 text-yellow-400" />
-                        <span className="font-semibold text-gray-900">{player.rating}</span>
+                        <span className="font-semibold text-gray-900">{player.rating ? player.rating.toFixed(1) : '0.0'}</span>
                       </div>
                       <p className="text-xs text-gray-600">Rating</p>
                     </div>

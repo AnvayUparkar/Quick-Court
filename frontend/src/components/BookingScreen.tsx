@@ -222,7 +222,7 @@ const BookingScreen = () => {
               <div className="flex items-center space-x-1 text-gray-600 mt-1">
                 <span className="text-yellow-400">★</span>
                 <span>
-                  {venue.rating} ({venue.reviews})
+                  {venue.rating > 0 ? `${venue.rating.toFixed(1)} (${venue.reviews} Reviews)` : `0.0 (${venue.reviews} Reviews)`}
                 </span>
               </div>
             </div>

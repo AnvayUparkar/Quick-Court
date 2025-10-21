@@ -154,7 +154,7 @@ const CourtListing = () => {
                 filteredFacilities.map((facility) => {
                   const minPrice = facility.courts && facility.courts.length > 0 ? Math.min(...facility.courts.map((court: any) => court.pricePerHour)) : 0;
                   const facilityReviews = reviews ? reviews.filter((r: any) => r.facilityId === facility._id) : [];
-                  const rating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 4.5;
+                  const rating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
                   const ratingCount = facilityReviews.length;
                   // Example tags: Top Rated, Budget, etc. (mock for now)
                   const tags = [];
@@ -175,7 +175,7 @@ const CourtListing = () => {
                         </div>
                         <div className="flex items-center mb-2">
                           <StarIcon className="h-4 w-4 text-yellow-400 mr-1" />
-                          <span className="text-sm font-medium">{`${rating.toFixed(1)} (${ratingCount})`}</span>
+                          <span className="text-sm font-medium">{rating > 0 ? `${rating.toFixed(1)} (${ratingCount} Reviews)` : `0.0 (${ratingCount} Reviews)`}</span>
                         </div>
                         <div className="flex flex-wrap gap-2 mb-2">
                           {facility.sports.map((sport, idx) => (
