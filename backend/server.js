@@ -65,9 +65,9 @@ app.use('/api/courts', require('./routes/courtRoutes')); // Mount court routes
 app.use('/api/admin', require('./routes/adminRoutes'));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
+// mongoose.connect(process.env.MONGO_URI)
+// .then(() => console.log('MongoDB connected'))
+// .catch(err => console.error(err));
 
 // Basic route
 app.get('/', (req, res) => {
