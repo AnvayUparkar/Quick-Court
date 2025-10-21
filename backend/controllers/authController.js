@@ -7,7 +7,7 @@ const cloudinary = require('../config/cloudinary'); // Import cloudinary
 const fs = require('fs'); // Import fs
 const bcrypt = require('bcryptjs'); // Import bcrypt
 const OTP = require('../models/OTP'); // Import OTP model
-const { sendOtpHandler } = require('./otpController'); // Import sendOtpHandler
+const { sendOtpHandler, generateAndSendOtpLogic } = require('./otpController'); // Import both handlers
 
 // @desc    Register user
 // @route   POST /api/auth/signup
@@ -48,8 +48,14 @@ exports.signup = catchAsync(async (req, res, next) => {
         verified: false, // User is not verified until OTP is confirmed
     });
 
-    // Send OTP using the dedicated handler
-    await sendOtpHandler(req, res); // We pass req and res directly to the handler
+    // Generate and Send OTP without sending a response here
+    const otpSendResult = await generateAndSendOtpLogic(email);
+
+    if (!otpSendResult.success) {
+        // If OTP sending failed, respond with an error and potentially delete the created user
+        await User.deleteOne({ _id: user._id }); // Clean up user if OTP fails
+        return res.status(500).json({ message: otpSendResult.error || 'Failed to send OTP for verification.' });
+    }
 
     res.status(201).json({
         success: true,
@@ -203,5 +209,16 @@ exports.resendOtp = catchAsync(async (req, res, next) => {
 
     // Use the sendOtpHandler to generate and send a new OTP
     // The sendOtpHandler already includes rate limiting and OTP storage
-    await sendOtpHandler(req, res); // Pass req and res directly
+    // We now use generateAndSendOtpLogic directly and handle the response here
+    const otpResendResult = await generateAndSendOtpLogic(email);
+
+    if (otpResendResult.success) {
+        res.status(200).json({ success: true, message: otpResendResult.message });
+    } else {
+        if (otpResendResult.error === "Please wait before resending OTP") {
+            res.status(429).json({ error: otpResendResult.error });
+        } else {
+            res.status(500).json({ error: otpResendResult.error || "Failed to resend OTP" });
+        }
+    }
 });
