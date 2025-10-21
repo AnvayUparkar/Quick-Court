@@ -1,31 +1,36 @@
-const nodemailer = require("nodemailer");
+// api/send-otp.js
+import nodemailer from "nodemailer";
 
-const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com", // Explicitly set Gmail's SMTP host
-    port: 587,              // Explicitly set port for STARTTLS
-    secure: false,          // Use 'false' for port 587 (STARTTLS)
-    requireTLS: true,       // Enforce TLS for secure connection
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-  const message = {
-    from: process.env.SMTP_USER, // Sender email
-    to: options.email,
-    subject: options.subject,
-    html: options.message,
-  };
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({ error: "Missing email or OTP" });
+  }
 
   try {
-    await transporter.sendMail(message);
-    console.log("✅ Email sent via Gmail SMTP:", options.subject);
-  } catch (err) {
-    console.error("❌ Error sending email via Gmail SMTP:", err);
-    throw err;
-  }
-};
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS, // App password
+      },
+    });
 
-module.exports = sendEmail;
+    await transporter.sendMail({
+      from: process.env.SMTP_USER,
+      to: email,
+      subject: "QuickCourt OTP",
+      html: `<p>Your OTP is <b>${otp}</b></p>`,
+    });
+
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error("Email send error:", err);
+    return res.status(500).json({ error: "Email failed" });
+  }
+}
