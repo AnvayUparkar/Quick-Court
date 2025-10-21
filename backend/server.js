@@ -20,7 +20,7 @@ if (!fs.existsSync(uploadsDir)) {
 connectDB();
 
 // Schedule daily slot generation
-// scheduleSlotGeneration();
+scheduleSlotGeneration();
 
 const app = express();
 
@@ -88,16 +88,27 @@ app.use((error, req, res, next) => {
     });
 });
 
+// This middleware will catch any response that might not be a string and stringify it
+// This is a last resort to prevent Vercel's BODY_NOT_A_STRING_FROM_FUNCTION error
+app.use((req, res, next) => {
+    if (typeof res.body === 'object' && res.body !== null && !res.headersSent) {
+        res.set('Content-Type', 'application/json');
+        res.send(JSON.stringify(res.body));
+    } else {
+        next();
+    }
+});
+
 // Fallback logger for debugging unhandled routes
 app.use((req, res, next) => {
   console.warn('⚠️ Unhandled route:', req.method, req.originalUrl);
   res.status(404).json({ message: 'Route not found', path: req.originalUrl });
 });
 
-// const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
