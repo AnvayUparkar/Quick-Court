@@ -96,7 +96,7 @@ app.use((req, res, next) => {
 });
 
 // This is only for local development, Vercel will handle the port
-// const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 // app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`);
@@ -108,10 +108,10 @@ app.use((req, res, next) => {
     await connectDB();
     console.log('Database connected successfully.');
     // If you need the app to listen on a port for local testing, add it here.
-    // const PORT = process.env.PORT || 8000;
-    // app.listen(PORT, () => {
-    //   console.log(`Server running on port ${PORT}`);
-    // });
+    const HOST = '0.0.0.0'; // Or '::' for IPv6
+    app.listen(PORT, HOST, () => {
+      console.log(`Server running on port ${PORT} bound to ${HOST}`);
+    });
   } catch (error) {
     console.error('❌ Application failed to start due to database connection error:', error);
     process.exit(1); // Exit with a failure code
