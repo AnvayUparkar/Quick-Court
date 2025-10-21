@@ -46,3 +46,17 @@ exports.getReviews = catchAsync(async (req, res, next) => {
         data: reviews
     });
 });
+
+// @desc    Get reviews for a specific facility
+// @route   GET /api/reviews/facility/:facilityId
+// @access  Public
+exports.getReviewsForFacility = catchAsync(async (req, res, next) => {
+    const { facilityId } = req.params;
+    const reviews = await Review.find({ facilityId }).populate('userId', 'name');
+
+    res.status(200).json({
+        success: true,
+        count: reviews.length,
+        data: reviews
+    });
+});

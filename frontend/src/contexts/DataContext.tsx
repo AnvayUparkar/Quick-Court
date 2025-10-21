@@ -8,10 +8,11 @@ import {
   Booking,
   AdminStats,
   OwnerStats,
-  Court
+  Court,
+  Review // Import Review type
 } from '../types';
 
-export type { Facility, Court };
+export type { Facility, Court, Review }; // Export Review type
 import { useAuth } from './AuthContext'; // Import useAuth to check user role
 
 export interface BookingPayload {
@@ -19,6 +20,12 @@ export interface BookingPayload {
   courtId: string;
   date: string;
   timeSlot: string;
+}
+
+export interface ReviewPayload {
+  facilityId: string;
+  rating: number;
+  comment: string;
 }
 
 export interface DataContextType {
@@ -39,6 +46,8 @@ export interface DataContextType {
   searchPlayers: (query: string, filters: { sport: string; level: string; location: string }) => any[];
   loading: boolean;
   error: string | null;
+  createReview: (reviewData: ReviewPayload) => Promise<void>; // Add createReview to context type
+  fetchReviewsForFacility: (facilityId: string) => Promise<Review[]>; // Add fetchReviewsForFacility to context type
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -228,6 +237,28 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  const createReview = useCallback(async (reviewData: ReviewPayload) => {
+    try {
+      await api.post('/api/reviews', reviewData, { headers: { Authorization: `Bearer ${token}` } });
+      // Optionally re-fetch all reviews or specifically for the facility
+      fetchReviews();
+      return Promise.resolve();
+    } catch (err: any) {
+      console.error('Error creating review:', err);
+      throw err;
+    }
+  }, [fetchReviews, token]);
+
+  const fetchReviewsForFacility = useCallback(async (facilityId: string) => {
+    try {
+      const response = await api.get(`/api/reviews/facility/${facilityId}`);
+      return response.data.data as Review[];
+    } catch (err: any) {
+      console.error(`Error fetching reviews for facility ${facilityId}:`, err);
+      throw err;
+    }
+  }, []);
+
   const value = {
     facilities,
     courts,
@@ -246,6 +277,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     searchPlayers,
     loading,
     error,
+    createReview, // Add createReview to value
+    fetchReviewsForFacility, // Add fetchReviewsForFacility to value
   };
 
   if (loading) {

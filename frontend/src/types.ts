@@ -67,3 +67,12 @@ export interface AdminStats {
   pendingFacilities: number;
   // Add more fields as needed for charts
 }
+
+export interface Review {
+  _id: string;
+  userId: User; // Changed from string to User
+  facilityId: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
