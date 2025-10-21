@@ -53,11 +53,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     const message = `Your OTP for QuickCourt is: ${otp}. It is valid for 10 minutes.`;
 
     try {
-        await sendEmail({
-            email: user.email,
-            subject: 'QuickCourt OTP Verification',
-            message,
-        });
+        await sendEmail(user.email, 'QuickCourt OTP Verification', message); // Updated call
 
         res.status(201).json({
             success: true,
@@ -217,11 +213,7 @@ exports.resendOtp = catchAsync(async (req, res, next) => {
     const message = `Your new OTP for QuickCourt is: ${otp}. It is valid for 10 minutes.`;
 
     try {
-        await sendEmail({
-            email: user.email,
-            subject: 'QuickCourt OTP Resend',
-            message,
-        });
+        await sendEmail(user.email, 'QuickCourt OTP Resend', message); // Updated call
 
         res.status(200).json({
             success: true,
