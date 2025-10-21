@@ -1,9 +1,17 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (options) => {
+    console.log('Attempting to send email...');
+    console.log('SMTP_HOST:', process.env.SMTP_HOST);
+    console.log('SMTP_PORT:', process.env.SMTP_PORT);
+    console.log('SMTP_USER:', process.env.SMTP_USER ? '*****' : 'MISSING'); // Mask user for logs
+    console.log('FROM_EMAIL:', process.env.FROM_EMAIL);
+    console.log('FROM_NAME:', process.env.FROM_NAME);
+
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
+        secure: process.env.SMTP_PORT == 465, // Use 'true' if port is 465, 'false' for other ports
         auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
@@ -17,7 +25,13 @@ const sendEmail = async (options) => {
         html: options.message,
     };
 
-    await transporter.sendMail(message);
+    try {
+        await transporter.sendMail(message);
+        console.log('Email sent successfully!');
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error; // Re-throw to be caught by catchAsync in authController
+    }
 };
 
 module.exports = sendEmail;
