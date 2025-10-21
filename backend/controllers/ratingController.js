@@ -6,9 +6,13 @@ const catchAsync = require('../middleware/catchAsync');
 // @route   POST /api/facilities/:id/rate
 // @access  Private (user must be logged in)
 exports.rateFacility = catchAsync(async (req, res, next) => {
-    const { rating, comment } = req.body;
-    const facilityId = req.params.id;
+    const { rating, comment, facilityId: bodyFacilityId } = req.body;
+    const facilityId = req.params.id || bodyFacilityId;
     const userId = req.user._id;
+
+    if (!facilityId) {
+        return res.status(400).json({ success: false, message: 'Facility ID is required.' });
+    }
 
     if (!rating || rating < 1 || rating > 5) {
         return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5.' });
