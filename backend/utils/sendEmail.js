@@ -2,7 +2,10 @@ const nodemailer = require("nodemailer");
 
 const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail", // Use Gmail service
+    host: "smtp.gmail.com", // Explicitly set Gmail's SMTP host
+    port: 587,              // Explicitly set port for STARTTLS
+    secure: false,          // Use 'false' for port 587 (STARTTLS)
+    requireTLS: true,       // Enforce TLS for secure connection
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
