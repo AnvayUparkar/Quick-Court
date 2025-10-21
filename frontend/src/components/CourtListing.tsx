@@ -189,7 +189,7 @@ const CourtListing = () => {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-lg text-gray-900">₹{minPrice}/hour</span>
-                          <Link to={`/venue/${facility._id}`} className="bg-gradient-to-r from-blue-500 via-green-500 to-green-600 text-white px-4 py-2 rounded font-semibold shadow-md hover:from-blue-600 hover:to-green-700 transition">View Details</Link>
+                          <Link to={`/venue/${facility._id}`} className="bg-gradient-to-r from-blue-500 via-green-500 to-green-600 text-white px-4 py-2 rounded font-semibold shadow-md hover:from-blue-600 hover:to-green-700 transition">View Courts</Link>
                         </div>
                       </div>
                     </div>

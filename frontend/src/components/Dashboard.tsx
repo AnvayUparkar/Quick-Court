@@ -135,7 +135,7 @@ const Dashboard = () => {
                       <StarIcon className="h-4 w-4 text-yellow-400" />
                       <span className="text-sm font-medium">4.5</span>
                     </div>
-                    <Link to={`/booking/${facility._id}`} className="font-semibold text-indigo-600">Book Now</Link>
+                    <Link to={`/venue/${facility._id}`} className="font-semibold text-indigo-600">View Courts</Link>
                   </div>
                 </div>
               </div>
