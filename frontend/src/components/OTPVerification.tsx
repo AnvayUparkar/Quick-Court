@@ -10,7 +10,7 @@ export default function OTPVerification() {
   const [loading, setLoading] = useState(false)
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
-  const { verifyOtp } = useAuth()
+  const { verifyOtp, resendOtp } = useAuth(); // Destructure resendOtp
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,10 +38,21 @@ export default function OTPVerification() {
   const handleResendOTP = async () => {
     setError(null);
     setLoading(true);
-    // Implement resend OTP logic here if needed, calling a backend endpoint
-    // For now, it will just show a message.
-    alert("Resend OTP functionality not yet implemented. Please check your email for the existing OTP.");
-    setLoading(false);
+
+    if (!userId) {
+      setError("User ID not found for resending OTP.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await resendOtp(userId);
+      alert("New OTP sent to your email.");
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

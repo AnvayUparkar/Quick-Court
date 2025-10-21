@@ -23,6 +23,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     signup: (userData: FormData) => Promise<any>;
     verifyOtp: (userId: string, otp: string) => Promise<any>;
+    resendOtp: (userId: string) => Promise<any>; // Add resendOtp to context type
     logout: () => void;
     updateUser: (userData: User) => void; // Added updateUser function
 }
@@ -104,6 +105,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return response.data;
     };
 
+    const resendOtp = async (userId: string) => {
+        const response = await axios.post(`${API_URL}/resend-otp`, { userId });
+        return response.data;
+    };
+
   const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
@@ -127,6 +133,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         signup,
         verifyOtp,
+        resendOtp, // Add resendOtp to the context value
         logout,
         updateUser, // Added updateUser to the context value
     };

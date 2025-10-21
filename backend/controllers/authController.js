@@ -189,3 +189,40 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
         return res.status(403).json({ message: 'Invalid or expired refresh token.' });
     }
 });
+
+// @desc    Resend OTP
+// @route   POST /api/auth/resend-otp
+// @access  Public
+exports.resendOtp = catchAsync(async (req, res, next) => {
+    const { userId } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+    await user.save();
+
+    const message = `Your new OTP for QuickCourt is: ${otp}. It is valid for 10 minutes.`;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'QuickCourt OTP Resend',
+            message,
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'New OTP sent to email.'
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Email could not be sent. Please try again.' });
+    }
+});
