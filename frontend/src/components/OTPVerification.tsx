@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
+import { requestOTP } from "../api"
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState("")
@@ -10,6 +11,7 @@ export default function OTPVerification() {
   const [loading, setLoading] = useState(false)
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
+  const email = searchParams.get("email");
   const { verifyOtp, resendOtp } = useAuth(); // Destructure resendOtp
   const navigate = useNavigate()
 
@@ -39,14 +41,14 @@ export default function OTPVerification() {
     setError(null);
     setLoading(true);
 
-    if (!userId) {
-      setError("User ID not found for resending OTP.");
+    if (!email) {
+      setError("Email not found for resending OTP.");
       setLoading(false);
       return;
     }
 
     try {
-      await resendOtp(userId);
+      await requestOTP(email);
       alert("New OTP sent to your email.");
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
