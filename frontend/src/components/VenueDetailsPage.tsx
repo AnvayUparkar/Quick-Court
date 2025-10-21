@@ -28,11 +28,8 @@ const VenueDetailsPage = () => {
     setLoading(true);
     setError(null);
     try {
-      // Ensure facilities are fetched globally first if not already present
-      if (facilities.length === 0) {
-        await fetchFacilities();
-      }
-      const foundFacility = facilities.find(f => f._id === id);
+      const currentFacilities = facilities.length === 0 ? (await fetchFacilities(), facilities) : facilities; // Ensure facilities are up-to-date
+      const foundFacility = currentFacilities.find(f => f._id === id);
       if (foundFacility) {
         setFacility(foundFacility);
         // Fetch courts and reviews concurrently
@@ -50,7 +47,7 @@ const VenueDetailsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [id, facilities, fetchFacilities, fetchCourtsForFacility, fetchReviewsForFacility]);
+  }, [id, fetchFacilities, fetchCourtsForFacility, fetchReviewsForFacility]); // Removed 'facilities' from dependencies
 
   useEffect(() => {
     loadFacilityData();
