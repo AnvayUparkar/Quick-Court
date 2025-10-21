@@ -27,6 +27,7 @@
     "node": "^25.0.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.9",
+    "@getbrevo/brevo": "latest",
     "nodemon": "^3.1.10",
     "razorpay": "^2.9.6"
   }

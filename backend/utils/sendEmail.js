@@ -1,31 +1,21 @@
-const nodemailer = require("nodemailer");
+const client = require('./emailService');
+const brevo = require('@getbrevo/brevo'); // Add this line
 
-const sendEmail = async (options) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS, // Gmail App Password
-    },
-  });
-
-  const message = {
-    from: process.env.SMTP_USER,
-    to: options.email,
-    subject: options.subject,
-    html: options.message,
-  };
-
+async function sendEmail(options) {
   try {
-    await transporter.sendMail(message);
-    console.log("✅ Email sent via Gmail SMTP:", options.subject);
-  } catch (err) {
-    console.error("❌ Error sending email via Gmail SMTP:", err);
-    throw err;
+    const sendSmtpEmail = new brevo.SendSmtpEmail(); // Instantiate SendSmtpEmail
+    sendSmtpEmail.to = [{ email: options.email }];
+    sendSmtpEmail.sender = { email: process.env.FROM_EMAIL, name: process.env.FROM_NAME };
+    sendSmtpEmail.subject = options.subject;
+    sendSmtpEmail.htmlContent = options.message;
+
+    const response = await client.sendTransacEmail(sendSmtpEmail);
+    console.log('✅ Email sent successfully via Brevo API:', response);
+    return response;
+  } catch (error) {
+    console.error('❌ Error sending email via Brevo API:', error);
+    throw error;
   }
-};
+}
 
 module.exports = sendEmail;
