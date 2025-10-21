@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendEmail = async (email, subject, html) => {
   try {
     const data = await resend.emails.send({
-      from: "QuickCourt <onboarding@resend.dev>", // verified domain
+      from: "QuickCourt <anvay.18077@sakec.ac.in>", // verified domain
       to: email,
       subject,
       html,
