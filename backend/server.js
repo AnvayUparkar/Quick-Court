@@ -8,10 +8,11 @@ const scheduleSlotGeneration = require('./utils/slotGenerator'); // Import the s
 const fs = require('fs'); // Import fs for file system operations
 
 // Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-}
+// const uploadsDir = path.join(__dirname, 'uploads');
+// // Only create uploads directory if not on Vercel
+// if (!process.env.VERCEL && !fs.existsSync(uploadsDir)) {
+//     fs.mkdirSync(uploadsDir, { recursive: true });
+// }
 
 // Load env vars
 
