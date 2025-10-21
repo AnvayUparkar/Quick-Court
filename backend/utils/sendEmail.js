@@ -11,8 +11,7 @@ const sendEmail = async (options) => {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
-        secure: process.env.SMTP_PORT === '465',
-        requireTLS: process.env.SMTP_PORT === '587', // Use requireTLS for port 587
+        secure: false, // Explicitly set to false as recommended for many services (e.g., SendGrid, Resend with port 587)
         auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS,
