@@ -10,16 +10,17 @@ import ReviewForm from './ReviewForm'; // Import the new ReviewForm component
 const VenueDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { facilities, fetchCourtsForFacility, fetchFacilities, reviews: globalReviews, fetchReviewsForFacility } = useData();
-  // Calculate average rating and review count for this facility
-  const facilityReviews = globalReviews ? globalReviews.filter((r: any) => r.facilityId === facility?._id) : [];
-  const avgRating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
-  const reviewCount = facilityReviews.length;
   const [facility, setFacility] = useState<Facility | null>(null);
   const [courts, setCourts] = useState<Court[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]); // State to store reviews for this facility
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showReviewForm, setShowReviewForm] = useState(false); // State to control review form visibility
+
+  // Calculate average rating and review count for this facility
+  const facilityReviews = facility && globalReviews ? globalReviews.filter((r: any) => r.facilityId === facility._id) : [];
+  const avgRating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
+  const reviewCount = facilityReviews.length;
 
   const loadFacilityData = useCallback(async () => {
     if (!id) return;
