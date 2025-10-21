@@ -6,6 +6,13 @@ const razorpayRoutes = require('./routes/razorpayRoutes');
 const path = require('path');
 const connectDB = require('./config/db');
 const scheduleSlotGeneration = require('./utils/slotGenerator'); // Import the scheduler directly
+const fs = require('fs'); // Import fs for file system operations
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // Load env vars
 
