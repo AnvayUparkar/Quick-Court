@@ -13,13 +13,15 @@ const CourtListing = () => {
     venueType: 'All',
     priceRange: 'Any Price',
     rating: 'Any Rating',
-    location: '',
+    location: 'All Locations',
   });
   const [sortBy, setSortBy] = useState('Relevance');
 
   useEffect(() => {
     fetchFacilities();
   }, [fetchFacilities]);
+
+  const uniqueLocations = Array.from(new Set(facilities.map(f => f.location.address.split(',')[0]))).filter(Boolean);
 
   // Filter facilities based on search query and filters
   let filteredFacilities = facilities.filter(facility => {
@@ -33,10 +35,11 @@ const CourtListing = () => {
   const matchesPrice = filters.priceRange === 'Any Price' || (parseInt(filters.priceRange) <= minPrice);
   // Calculate rating and ratingCount from global reviews
   const facilityReviews = reviews ? reviews.filter((r: any) => r.facilityId === facility._id) : [];
-  const rating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 4.5;
+  const rating = facilityReviews.length > 0 ? (facilityReviews.reduce((acc: number, r: any) => acc + r.rating, 0) / facilityReviews.length) : 0;
   //const Review = facilityReviews.length; // Removed unused variable
   const matchesRating = filters.rating === 'Any Rating' || (rating >= parseFloat(filters.rating));
-  return facility.approved && matchesSearch && matchesSport && matchesVenueType && matchesPrice && matchesRating;
+  const matchesLocation = filters.location === 'All Locations' || (facility.location.address.toLowerCase().includes(filters.location.toLowerCase()));
+  return facility.approved && matchesSearch && matchesSport && matchesVenueType && matchesPrice && matchesRating && matchesLocation;
   });
 
   // Sort logic
@@ -112,6 +115,15 @@ const CourtListing = () => {
                 </select>
               </div>
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <select name="location" value={filters.location} onChange={handleFilterChange} className="block w-full border-gray-300 rounded-md">
+                  <option value="All Locations">All Locations</option>
+                  {uniqueLocations.map(location => (
+                    <option key={location} value={location}>{location}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Rating</label>
                 <select name="rating" value={filters.rating} onChange={handleFilterChange} className="block w-full border-gray-300 rounded-md">
                   <option value="Any Rating">Any Rating</option>
@@ -120,7 +132,7 @@ const CourtListing = () => {
                   <option value="4.5">4.5+</option>
                 </select>
               </div>
-              <button onClick={() => setFilters({ sport: 'All Sports', venueType: 'All', priceRange: 'Any Price', rating: 'Any Rating', location: '' })} className="w-full bg-red-600 text-white py-2 rounded mt-2">Clear Filters</button>
+              <button onClick={() => setFilters({ sport: 'All Sports', venueType: 'All', priceRange: 'Any Price', rating: 'Any Rating', location: 'All Locations' })} className="w-full bg-red-600 text-white py-2 rounded mt-2">Clear Filters</button>
             </div>
           </aside>
           {/* Main Venue Grid */}
