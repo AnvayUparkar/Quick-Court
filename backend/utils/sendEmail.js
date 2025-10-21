@@ -1,8 +1,8 @@
-import { Resend } from "resend";
+const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendEmail = async (email, subject, html) => {
+const sendEmail = async (email, subject, html) => {
   try {
     const data = await resend.emails.send({
       from: "QuickCourt <onboarding@resend.dev>", // verified domain
@@ -16,3 +16,5 @@ export const sendEmail = async (email, subject, html) => {
     throw err;
   }
 };
+
+module.exports = sendEmail;
