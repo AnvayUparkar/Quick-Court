@@ -82,7 +82,16 @@ const CourtListing = () => {
         <p className="text-gray-600 mb-6">Discover and Book Nearby Venues</p>
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar Filters */}
-          <aside className="md:w-1/4 bg-white rounded-lg shadow-md p-6 mb-8">
+          <aside className="md:w-1/4 bg-white rounded-lg shadow-md p-6 mb-8 relative overflow-hidden group">
+            <div className="absolute inset-0 rounded-lg pointer-events-none"
+                 style={{
+                   background: "linear-gradient(to right, #3b82f6, #10b981)",
+                   mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                   maskComposite: "exclude",
+                   padding: "2px", // Border thickness
+                   WebkitMaskComposite: "exclude", // For Safari
+                 }}
+            ></div>
             <h2 className="text-lg font-bold mb-4">Filters</h2>
             <div className="space-y-4">
               <div>
