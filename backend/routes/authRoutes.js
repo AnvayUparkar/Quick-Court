@@ -1,6 +1,5 @@
 const express = require('express');
 const { signup, verifyOtp, login, refreshToken, resendOtp } = require('../controllers/authController'); // Add resendOtp
-const { sendOtpHandler } = require('../controllers/otpController');
 const upload = require('../utils/multer'); // Import multer
 
 const router = express.Router();
@@ -10,6 +9,5 @@ router.post('/verify-otp', verifyOtp);
 router.post('/resend-otp', resendOtp); // Add resend OTP route
 router.post('/login', login);
 router.post('/refresh-token', refreshToken);
-router.post('/send-otp', sendOtpHandler);
 
 module.exports = router;

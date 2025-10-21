@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const cloudinary = require('../config/cloudinary'); // Import cloudinary
 const fs = require('fs'); // Import fs
 const bcrypt = require('bcryptjs'); // Import bcrypt
+const OTP = require('../models/OTP'); // Import OTP model
+const { sendOtpHandler } = require('./otpController'); // Import sendOtpHandler
 
 // @desc    Register user
 // @route   POST /api/auth/signup
@@ -41,57 +43,44 @@ exports.signup = catchAsync(async (req, res, next) => {
         email,
         password: hashedPassword, // Use hashed password
         role,
-        avatar: avatarUrl || undefined
+        avatar: avatarUrl || undefined,
+        verified: false, // User is not verified until OTP is confirmed
     });
 
-    // Generate OTP (for simplicity, a 6-digit number)
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otp = otp; // Store OTP in user object temporarily, or in a separate model/cache
-    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
-    await user.save();
+    // Send OTP using the dedicated handler
+    await sendOtpHandler(req, res); // We pass req and res directly to the handler
 
-    const message = `Your OTP for QuickCourt is: ${otp}. It is valid for 10 minutes.`;
-
-    try {
-        await sendEmail({
-            email: user.email,
-            subject: 'QuickCourt OTP Verification',
-            message,
-        });
-
-        res.status(201).json({
-            success: true,
-            message: 'OTP sent to email. Please verify your account.',
-            userId: user._id
-        });
-    } catch (err) {
-        console.error('Error in sendEmail for signup:', err); // Log the full error object
-        user.otp = undefined; // Clear OTP if email sending fails
-        await user.save();
-        return res.status(500).json({ message: 'Email could not be sent. Please try again.', error: err.message }); // Send error message to frontend
-    }
+    res.status(201).json({
+        success: true,
+        message: 'User registered successfully. OTP sent for verification.',
+        userId: user._id
+    });
 });
 
 // @desc    Verify OTP
 // @route   POST /api/auth/verify-otp
 // @access  Public
 exports.verifyOtp = catchAsync(async (req, res, next) => {
-    const { userId, otp } = req.body;
+    const { email, otp } = req.body;
 
-    const user = await User.findById(userId);
+    const otpRecord = await OTP.findOne({ email, otp });
 
-    if (!user) {
-        return res.status(400).json({ message: 'Invalid user ID.' });
-    }
-
-    if (user.otp !== otp || user.otpExpires < new Date(Date.now())) { // Check for OTP expiry
+    if (!otpRecord) {
         return res.status(400).json({ message: 'Invalid or expired OTP.' });
     }
 
+    // If OTP exists and is not expired (handled by MongoDB TTL index),
+    // find the user and mark as verified.
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+    }
+
     user.verified = true;
-    user.otp = undefined; // Clear OTP after successful verification
-    user.otpExpires = undefined; // Clear OTP expiry
     await user.save();
+
+    await OTP.deleteOne({ _id: otpRecord._id }); // Delete OTP after successful verification
 
     res.status(200).json({
         success: true,
@@ -200,35 +189,18 @@ exports.refreshToken = catchAsync(async (req, res, next) => {
 // @route   POST /api/auth/resend-otp
 // @access  Public
 exports.resendOtp = catchAsync(async (req, res, next) => {
-    const { userId } = req.body;
+    const { email } = req.body;
 
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email });
 
     if (!user) {
         return res.status(404).json({ message: 'User not found.' });
     }
 
-    // Generate new OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otp = otp;
-    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
-    await user.save();
+    // Invalidate any existing OTPs for the user
+    await OTP.deleteMany({ email });
 
-    const message = `Your new OTP for QuickCourt is: ${otp}. It is valid for 10 minutes.`;
-
-    try {
-        await sendEmail({
-            email: user.email,
-            subject: 'QuickCourt OTP Resend',
-            message,
-        });
-
-        res.status(200).json({
-            success: true,
-            message: 'New OTP sent to email.'
-        });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Email could not be sent. Please try again.' });
-    }
+    // Use the sendOtpHandler to generate and send a new OTP
+    // The sendOtpHandler already includes rate limiting and OTP storage
+    await sendOtpHandler(req, res); // Pass req and res directly
 });
