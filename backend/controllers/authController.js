@@ -65,10 +65,10 @@ exports.signup = catchAsync(async (req, res, next) => {
             userId: user._id
         });
     } catch (err) {
-        console.error(err);
+        console.error('Error in sendEmail for signup:', err); // Log the full error object
         user.otp = undefined; // Clear OTP if email sending fails
         await user.save();
-        return res.status(500).json({ message: 'Email could not be sent. Please try again.' });
+        return res.status(500).json({ message: 'Email could not be sent. Please try again.', error: err.message }); // Send error message to frontend
     }
 });
 
