@@ -70,7 +70,12 @@ exports.signup = catchAsync(async (req, res, next) => {
 exports.verifyOtp = catchAsync(async (req, res, next) => {
     const { email, otp } = req.body;
 
+    console.log('Verify OTP - Received Email:', email);
+    console.log('Verify OTP - Received OTP:', otp);
+
     const otpRecord = await OTP.findOne({ email, otp });
+
+    console.log('Verify OTP - OTP Record Found:', otpRecord);
 
     if (!otpRecord) {
         return res.status(400).json({ message: 'Invalid or expired OTP.' });
