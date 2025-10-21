@@ -22,8 +22,8 @@ interface AuthContextType {
     loading: boolean;
     login: (email: string, password: string) => Promise<void>;
     signup: (userData: FormData) => Promise<any>;
-    verifyOtp: (userId: string, otp: string) => Promise<any>;
-    resendOtp: (userId: string) => Promise<any>; // Add resendOtp to context type
+    verifyOtp: (email: string, otp: string) => Promise<any>; // Changed userId to email
+    resendOtp: (email: string) => Promise<any>; // Changed userId to email
     logout: () => void;
     updateUser: (userData: User) => void; // Added updateUser function
 }
@@ -100,13 +100,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return response.data; 
     };
 
-    const verifyOtp = async (userId: string, otp: string) => { // Explicitly type parameters
-        const response = await axios.post(`${API_URL}/verify-otp`, { userId, otp });
+    const verifyOtp = async (email: string, otp: string) => { // Changed userId to email
+        const response = await axios.post(`${API_URL}/verify-otp`, { email, otp });
         return response.data;
     };
 
-    const resendOtp = async (userId: string) => {
-        const response = await axios.post(`${API_URL}/resend-otp`, { userId });
+    const resendOtp = async (email: string) => { // Changed userId to email
+        const response = await axios.post(`${API_URL}/resend-otp`, { email });
         return response.data;
     };
 

@@ -27,7 +27,7 @@ export default function OTPVerification() {
     }
 
     try {
-      await verifyOtp(userId, otp)
+      await verifyOtp(email, otp); // Changed userId to email
       alert("Account verified successfully! You can now log in.")
       navigate("/login")
     } catch (err: any) {
@@ -48,8 +48,7 @@ export default function OTPVerification() {
     }
 
     try {
-      // await requestOTP(email); // Replace with resendOtp from AuthContext
-      await resendOtp(userId); // Use resendOtp from AuthContext
+      await resendOtp(email); // Changed userId to email
       alert("New OTP sent to your email.");
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
