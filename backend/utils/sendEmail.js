@@ -1,20 +1,26 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const sendEmail = async (options) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail", // Use Gmail service
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
-const sendEmail = async (email, subject, htmlContent) => {
+  const message = {
+    from: process.env.SMTP_USER, // Sender email
+    to: options.email,
+    subject: options.subject,
+    html: options.message,
+  };
+
   try {
-    const response = await resend.emails.send({
-      from: "QuickCourt <anvay.18077@sakec.ac.in>", // verified domain
-      to: email,
-      subject,
-      html: htmlContent,
-    });
-
-    console.log("✅ Email sent via Resend:", response);
-    return true;
+    await transporter.sendMail(message);
+    console.log("✅ Email sent via Gmail SMTP:", options.subject);
   } catch (err) {
-    console.error("❌ Error sending email:", err);
+    console.error("❌ Error sending email via Gmail SMTP:", err);
     throw err;
   }
 };
