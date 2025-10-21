@@ -94,9 +94,23 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
 
     await OTP.deleteOne({ _id: otpRecord._id }); // Delete OTP after successful verification
 
+    // Generate tokens for direct login after OTP verification
+    const token = generateToken(user._id, user.role);
+    const refreshToken = generateRefreshToken(user._id);
+
     res.status(200).json({
         success: true,
-        message: 'Account verified successfully. Please login.'
+        message: 'Account verified successfully. Redirecting to dashboard.',
+        token,
+        refreshToken,
+        user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            avatar: user.avatar,
+            isBanned: user.isBanned,
+        }
     });
 });
 
