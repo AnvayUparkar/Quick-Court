@@ -38,7 +38,6 @@ export default function SignupScreen() {
 
     try {
       const data = await signup(formData)
-      await requestOTP(email);
       navigate(`/verify-otp?userId=${data.userId}&email=${email}`)
     } catch (err: any) {
       setError(err.response?.data?.message || err.message)

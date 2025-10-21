@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-import { requestOTP } from "../api"
+// import { requestOTP } from "../api" // Remove this line
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState("")
@@ -48,7 +48,8 @@ export default function OTPVerification() {
     }
 
     try {
-      await requestOTP(email);
+      // await requestOTP(email); // Replace with resendOtp from AuthContext
+      await resendOtp(userId); // Use resendOtp from AuthContext
       alert("New OTP sent to your email.");
     } catch (err: any) {
       setError(err.response?.data?.message || err.message);
