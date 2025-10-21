@@ -21,11 +21,17 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     let avatarUrl = '';
     if (req.file) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'quickcourt/avatars',
-        });
-        avatarUrl = result.secure_url;
-        fs.unlinkSync(req.file.path); // Remove file from local uploads folder
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'quickcourt/avatars',
+            });
+            avatarUrl = result.secure_url;
+            fs.unlinkSync(req.file.path); // Remove file from local uploads folder
+        } catch (uploadError) {
+            console.error('Cloudinary upload error:', uploadError);
+            // Even if upload fails, continue with user creation but without avatar
+            fs.unlinkSync(req.file.path); // Attempt to remove local file even if Cloudinary fails
+        }
     }
 
     const hashedPassword = await bcrypt.hash(password, 10); // Hash password before creating user
