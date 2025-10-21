@@ -16,9 +16,6 @@ if (!fs.existsSync(uploadsDir)) {
 // Load env vars
 
 // Connect to database
-connectDB();
-
-// Schedule daily slot generation
 // scheduleSlotGeneration();
 
 const app = express();
@@ -104,10 +101,33 @@ app.use((req, res, next) => {
   res.status(404).json({ message: 'Route not found', path: req.originalUrl });
 });
 
+// This is only for local development, Vercel will handle the port
 // const PORT = process.env.PORT || 8000;
 
 // app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`);
 // });
+
+// Ensure DB connection before starting the app
+(async () => {
+  try {
+    await connectDB();
+    console.log('Database connected successfully.');
+    // If you need the app to listen on a port for local testing, add it here.
+    // const PORT = process.env.PORT || 8000;
+    // app.listen(PORT, () => {
+    //   console.log(`Server running on port ${PORT}`);
+    // });
+  } catch (error) {
+    console.error('❌ Application failed to start due to database connection error:', error);
+    process.exit(1); // Exit with a failure code
+  }
+})();
+
+// Handle unhandled promise rejections (safety net)
+process.on('unhandledRejection', (err) => {
+  console.error('❌ Unhandled Rejection! Shutting down...', err);
+  process.exit(1); // Exit with a failure code
+});
 
 module.exports = app;
