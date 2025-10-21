@@ -43,7 +43,7 @@ exports.rateFacility = catchAsync(async (req, res, next) => {
 // @route   GET /api/reviews
 // @access  Public
 exports.getReviews = catchAsync(async (req, res, next) => {
-    const reviews = await Review.find().populate('user', 'name');
+    const reviews = await Review.find().populate('userId', 'name');
     res.status(200).json({
         success: true,
         count: reviews.length,
