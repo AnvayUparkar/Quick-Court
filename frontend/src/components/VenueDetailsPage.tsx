@@ -89,7 +89,7 @@ const VenueDetailsPage = () => {
             <div className="flex items-center space-x-4 text-gray-700 mb-6">
               <div className="flex items-center">
                 <StarIcon className="h-5 w-5 text-yellow-400 mr-1" />
-                <span>{avgRating > 0 ? `${avgRating.toFixed(1)} (${reviewCount} Reviews)` : 'No ratings yet'}</span>
+                <span>{avgRating > 0 ? `${avgRating.toFixed(1)} (${reviewCount} Reviews)` : `0.0 (${reviewCount} Reviews)`}</span>
               </div>
               <span>•</span>
               <span>{facility.sports.join(', ')}</span>
