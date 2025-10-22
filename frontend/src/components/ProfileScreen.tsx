@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 // import Header from "./shared/Header"; // Removed local Header import
 import { useAuth } from "../contexts/AuthContext";
 import axios from 'axios';
+import api from "../api"; // Added import for api instance
 
 const ProfileScreen = () => {
   const { user, token , updateUser } = useAuth();
@@ -62,7 +63,7 @@ const ProfileScreen = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.put(`http://localhost:8000/api/users/profile`, formData, config);
+      const response = await api.put(`/api/users/profile`, formData, config);
       setSuccess(response.data.message || "Profile updated successfully!");
       updateUser(response.data.user); // Update user in AuthContext
       // Optionally update user in AuthContext if needed, though a full page reload might be simpler
