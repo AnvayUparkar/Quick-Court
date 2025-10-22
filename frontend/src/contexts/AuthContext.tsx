@@ -53,9 +53,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (storedToken && storedRefreshToken && storedUser) {
                 setToken(storedToken);
                 setRefreshToken(storedRefreshToken);
-                const parsedUser = JSON.parse(storedUser);
-                setUser({ ...parsedUser, _id: parsedUser._id || parsedUser.id }); // Ensure _id is always set
-                console.log('AuthContext: User loaded from localStorage:', parsedUser);
+                try {
+                    const parsedUser = JSON.parse(storedUser);
+                    setUser({ ...parsedUser, _id: parsedUser._id || parsedUser.id }); // Ensure _id is always set
+                    console.log('AuthContext: User loaded from localStorage:', parsedUser);
+                } catch (error) {
+                    console.error("AuthContext: Error parsing stored user data:", error);
+                    // Clear invalid data if parsing fails
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('refreshToken');
+                }
             } else {
                 console.log('AuthContext: Missing required authentication data');
             }
