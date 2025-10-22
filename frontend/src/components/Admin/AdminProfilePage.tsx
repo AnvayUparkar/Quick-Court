@@ -66,7 +66,7 @@ const AdminProfilePage: React.FC = () => {
         formData.append('removeAvatar', 'true');
       }
 
-      const response = await api.put(`/admin/users/${user._id}`, formData, {
+      const response = await api.put(`/api/admin/users/${user._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
