@@ -33,27 +33,14 @@ export default function OTPVerification() {
     }
 
     try {
-      const response = await verifyOtp(email, otp); // Changed userId to email
-      const { token, refreshToken, user } = response;
-
-      // Manually set items in localStorage and update AuthContext state
-      localStorage.setItem('token', token);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify({ ...user, _id: user._id || user.id }));
-
-      // This should trigger AuthContext's useEffect to load the user and redirect
-      // Or, ideally, AuthContext would expose a function to directly set this state
-      // For now, a full page reload or a direct call to a simulated login might be needed.
-      // Given the AuthContext already has navigation logic, navigating to '/' might trigger it.
-
-      if (user.role === 'admin') {
-        navigate('/admin/dashboard');
-      } else if (user.role === 'facility_owner') {
-        navigate('/owner/dashboard');
-      } else {
-        navigate('/');
+      if (!email) {
+        setError("Email not found. Please try again.");
+        setLoading(false);
+        return;
       }
-
+      await verifyOtp(email, otp); // Changed userId to email
+      alert("Account verified successfully! You can now log in.")
+      navigate("/login")
     } catch (err: any) {
       setError(err.response?.data?.message || err.message)
     } finally {

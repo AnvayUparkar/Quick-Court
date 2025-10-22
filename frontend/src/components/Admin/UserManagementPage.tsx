@@ -15,7 +15,7 @@ const UserManagementPage: React.FC = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await api.get('/admin/users');
+      const response = await api.get('/api/admin/users');
       setUsers(response.data.data);
     } catch (err: any) {
       console.error('Error fetching users:', err);
@@ -36,7 +36,7 @@ const UserManagementPage: React.FC = () => {
 
   const handleBanToggle = useCallback(async (userId: string, isBanned: boolean) => {
     try {
-      await api.put(`/admin/users/${userId}`, { isBanned: !isBanned });
+      await api.put(`/api/admin/users/${userId}`, { isBanned: !isBanned });
       fetchUsers(); // Refresh user list
     } catch (err: any) {
       console.error('Error updating user ban status:', err);
