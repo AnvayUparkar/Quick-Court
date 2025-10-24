@@ -14,6 +14,7 @@ import {
 
 export type { Facility, Court, Review }; // Export Review type
 import { useAuth } from './AuthContext'; // Import useAuth to check user role
+import Loader from '../components/shared/Loader'; // Import Loader component
 
 export interface BookingPayload {
   facilityId: string;
@@ -287,7 +288,11 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   return (
