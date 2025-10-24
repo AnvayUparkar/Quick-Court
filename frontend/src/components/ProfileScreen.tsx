@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from "react";
 // import Header from "./shared/Header"; // Removed local Header import
 import { useAuth } from "../contexts/AuthContext";
-import axios from 'axios';
 import api from "../api"; // Added import for api instance
-import Loader from "./shared/Loader"; // Added import for Loader component
+import Loader from "./shared/Loader.tsx";
 
 const ProfileScreen = () => {
   const { user, token , updateUser } = useAuth();
