@@ -59,10 +59,10 @@ export default function SignupScreen() {
   const randomImage = React.useMemo(() => images[Math.floor(Math.random() * images.length)], [])
 
   return (
-    <div className="flex flex-col md:flex-row w-screen h-screen bg-[#f8f9fa]">
+    <div className="flex flex-row w-screen h-screen bg-[#f8f9fa]">
       {/* Left side full image */}
       <div
-        className="hidden md:block md:w-1/2 h-full bg-cover bg-center"
+        className="w-1/2 h-full bg-cover bg-center"
         style={{ backgroundImage: `url('${randomImage}')` }}
       ></div>
       {/* Right side signup card container */}
