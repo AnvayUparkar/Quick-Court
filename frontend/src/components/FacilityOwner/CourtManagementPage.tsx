@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getFacilityCourts, addCourt, updateCourt, deleteCourt, addTimeSlot, removeTimeSlot } from '../../api';
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 
 interface Court {
   _id: string;
@@ -257,10 +258,8 @@ const CourtManagementPage = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-lg text-gray-600">Loading courts...</div>
-        </div>
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
       </div>
     );
   }

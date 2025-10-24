@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../api';
 import { Booking } from '../../types'; // Assuming you have a Booking type defined and updated
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 
 const UserBookingsPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -34,7 +35,11 @@ const UserBookingsPage: React.FC = () => {
   }, [userId]);
 
   if (loading) {
-    return <div className="text-center py-8">Loading user bookings...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {

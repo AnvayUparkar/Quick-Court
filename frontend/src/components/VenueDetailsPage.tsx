@@ -6,6 +6,9 @@ import { useData, Facility, Court, Review } from '../contexts/DataContext';
 import { MapPinIcon, StarIcon, WifiIcon, ClockIcon } from '@heroicons/react/24/solid';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import ReviewForm from './ReviewForm'; // Import the new ReviewForm component
+import Loader from './shared/Loader'; // Import the Loader component
+import { useAuth } from '../contexts/AuthContext';
+import { toast } from 'react-toastify';
 
 const VenueDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +61,7 @@ const VenueDetailsPage = () => {
     loadFacilityData(); // Reload data to show new review
   };
 
-  if (loading) return <div className="text-center py-10">Loading facility details...</div>;
+  if (loading) return <div className="text-center py-10"><Loader size="w-10 h-10" color="border-blue-600" /></div>;
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
   if (!facility) return <div className="text-center py-10">No facility found.</div>;
 

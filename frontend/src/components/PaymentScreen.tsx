@@ -4,6 +4,7 @@ import { DataContext } from '../contexts/DataContext';
 import { useContext } from 'react';
 import type { DataContextType } from '../contexts/DataContext';
 import { CheckCircleIcon, CreditCardIcon, DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
+import Loader from './shared/Loader';
 
 // Add Razorpay type declarations at the top level
 declare global {
@@ -366,7 +367,7 @@ const PaymentScreen = () => {
                   onClick={() => handleRazorpayPayment()}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "Pay with Razorpay"}
+                  {loading ? <Loader size="w-5 h-5" color="border-white" /> : "Pay with Razorpay"}
                 </button>
               </div>
 

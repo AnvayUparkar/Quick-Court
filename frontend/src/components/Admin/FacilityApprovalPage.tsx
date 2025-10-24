@@ -3,6 +3,7 @@ import { useData } from '../../contexts/DataContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { Facility } from '../../types'; // Assuming you have a Facility type defined
 import api from '../../api';
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 
 const FacilityApprovalPage: React.FC = () => {
   const { user } = useAuth();
@@ -47,7 +48,11 @@ const FacilityApprovalPage: React.FC = () => {
   }, [fetchPendingFacilities, fetchAdminStats]);
 
   if (loading) {
-    return <div className="text-center py-8">Loading Pending Facilities...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {

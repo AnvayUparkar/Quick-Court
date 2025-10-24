@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
 import { User } from '../../types'; // Assuming you have a User type defined
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import Loader from '../shared/Loader'; // Import the Loader component
 
 const UserManagementPage: React.FC = () => {
   const { user } = useAuth();
@@ -52,7 +53,11 @@ const UserManagementPage: React.FC = () => {
   });
 
   if (loading) {
-    return <div className="text-center py-8">Loading Users...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {

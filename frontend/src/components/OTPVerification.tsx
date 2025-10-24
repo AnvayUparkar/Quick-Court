@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 // import { requestOTP } from "../api" // Remove this line
+import Loader from "./Loader"
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState("")
@@ -102,9 +103,9 @@ export default function OTPVerification() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              {loading ? "Verifying..." : "Verify Account"}
+              {loading ? <Loader size="w-5 h-5" color="border-white" /> : "Verify Account"}
             </button>
           </div>
           <div className="text-sm text-center">

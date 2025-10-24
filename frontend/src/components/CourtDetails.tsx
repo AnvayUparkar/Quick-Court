@@ -31,6 +31,7 @@ import {
   UserIcon,
 } from '@heroicons/react/24/solid';
 import { CheckCircleIcon, PhotoIcon } from '@heroicons/react/24/outline';
+import Loader from './shared/Loader'; // Import the new Loader component
 
 const CourtDetails = () => {
   const { id } = useParams<{ id: string }>(); // This `id` is actually facilityId
@@ -83,7 +84,7 @@ const CourtDetails = () => {
   const avgRating = reviews.length > 0 ? (reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length) : 0;
   const reviewCount = reviews.length;
 
-  if (loading) return <div className="text-center py-10">Loading court details...</div>;
+  if (loading) return <div className="text-center py-10"><Loader size="w-10 h-10" color="border-blue-600" /></div>;
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>;
   if (!facility || !court) return <div className="text-center py-10">No facility or court found.</div>;
 

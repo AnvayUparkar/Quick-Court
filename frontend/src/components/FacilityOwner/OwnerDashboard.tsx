@@ -5,6 +5,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Link } from 'react-router-dom'; // Added Link import
 // import Header from '../shared/Header'; // Removed unused Header import
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 
 ChartJS.register(
   CategoryScale,
@@ -94,7 +95,11 @@ const OwnerDashboard: React.FC = () => {
   // --- End Chart Data ---
 
   if (loading) {
-    return <div className="text-center py-8">Loading Owner Dashboard...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {

@@ -6,6 +6,7 @@ import { useData } from "../contexts/DataContext"
 import { Facility, Court } from "../types"
 import { useAuth } from "../contexts/AuthContext"
 import { MapPinIcon, CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/solid"
+import Loader from './shared/Loader'; // Import the Loader component
 
 const VenueBookingPage = () => {
   // Helper to check if a time slot is in the past for the selected date
@@ -156,7 +157,7 @@ const VenueBookingPage = () => {
     }
   }
 
-  if (loading) return <div className="text-center py-10">Loading court booking details...</div>
+  if (loading) return <div className="text-center py-10"><Loader size="w-10 h-10" color="border-blue-600" /></div>
   if (error) return <div className="text-center py-10 text-red-600">Error: {error}</div>
   if (!facility || !court) return <div className="text-center py-10">Court or facility not found.</div>
 

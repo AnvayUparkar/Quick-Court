@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // import Header from '../shared/Header'; // Removed local Header import
+import { Link } from 'react-router-dom';
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 import api from '../../api';
@@ -67,7 +69,11 @@ const BookingOverviewPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading Bookings...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {

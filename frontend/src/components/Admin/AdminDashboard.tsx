@@ -15,6 +15,7 @@ import {
   BarElement,
   ArcElement
 } from 'chart.js';
+import Loader from '../../components/shared/Loader'; // Import the Loader component
 
 ChartJS.register(
   CategoryScale,
@@ -46,7 +47,11 @@ const AdminDashboard: React.FC = () => {
   }, [user, fetchAdminStats]);
 
   if (loading) {
-    return <div className="text-center py-8">Loading Admin Dashboard...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader size="w-10 h-10" color="border-blue-600" />
+      </div>
+    );
   }
 
   if (error) {
