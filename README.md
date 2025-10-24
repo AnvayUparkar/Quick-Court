@@ -3,20 +3,32 @@ QuickCourt - Court Booking and Management Platform
 QuickCourt is a full-stack web application designed to streamline legal workflows, including case filing, lawyer-client interactions, document management, and digital payments. The platform aims to bring transparency, speed, and convenience to the judicial process through automation and modern web technologies.
 
 🚀 Features
+
 • Secure user authentication (Admin, Lawyer, and Client roles)
+
 • Case filing, tracking, and management system
+
 • Email-based OTP authentication via Brevo API
+
 • Online payment gateway integration via Razorpay
+
 • Real-time case updates and document uploads
+
 • Responsive dashboard with analytics
+
 • Admin panel for user and case control
 
 ⚙️ Tech Stack
 • Frontend: React.js + Tailwind CSS
+
 • Backend: Node.js + Express.js
-• Database: MongoDB (Mongoose ORM)
+
+• Database: MongoDB (Mongoose Atlas)
+
 • Deployment: Vercel (Frontend) + Render (Backend)
+
 • Email OTP: Brevo API (Transactional Emails)
+
 • Payments: Razorpay Payment Gateway
 
 🧩 OTP Verification (via Brevo)
@@ -42,9 +54,13 @@ To run QuickCourt locally, create a `.env` file in the backend directory and add
 
 PORT=5000
 MONGO_URI=your_mongodb_uri
+
 JWT_SECRET=your_jwt_secret
+
 BREVO_API_KEY=your_brevo_api_key
+
 RAZORPAY_KEY_ID=your_razorpay_key_id
+
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 
 🚀 Installation
