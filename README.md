@@ -1,22 +1,22 @@
 QuickCourt - Court Booking and Management Platform
 
-QuickCourt is a full-stack web application designed to streamline legal workflows, including case filing, lawyer-client interactions, document management, and digital payments. The platform aims to bring transparency, speed, and convenience to the judicial process through automation and modern web technologies.
+QuickCourt is a full-stack web application designed to streamline sports court booking workflows, including court scheduling, user management, real-time availability tracking, and digital payments. The platform aims to bring transparency, speed, and convenience to the booking process through automation and modern web technologies.
 
 🚀 Features
 
-• Secure user authentication (Admin, Lawyer, and Client roles)
+• Secure user authentication (Admin and Player roles)
 
-• Case filing, tracking, and management system
+• Real-time court availability and booking system
 
 • Email-based OTP authentication via Brevo API
 
 • Online payment gateway integration via Razorpay
 
-• Real-time case updates and document uploads
+• Automated booking confirmation and updates
 
-• Responsive dashboard with analytics
+• Responsive dashboard for users and admins
 
-• Admin panel for user and case control
+• Admin panel for court and booking management
 
 ⚙️ Tech Stack
 • Frontend: React.js + Tailwind CSS
