@@ -21,7 +21,7 @@ const UserBookingsPage: React.FC = () => {
         setLoading(true);
         setError(null);
         // Assuming a backend endpoint like /api/admin/users/:userId/bookings
-        const response = await api.get(`/admin/users/${userId}/bookings`);
+        const response = await api.get(`/api/admin/users/${userId}/bookings`);
         setBookings(response.data.data || []);
       } catch (err: any) {
         console.error('Error fetching user bookings:', err);
