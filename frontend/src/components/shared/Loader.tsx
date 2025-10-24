@@ -5,7 +5,7 @@ interface LoaderProps {
   color?: string; // e.g., 'teal', 'blue', 'indigo'
 }
 
-const Loader: React.FC<LoaderProps> = ({ size = 'w-8 h-8', color = 'teal' }) => {
+const Loader: React.FC<LoaderProps> = ({ size = 'w-8 h-8' }) => {
   const sizeMap: { [key: string]: number } = {
     'w-6 h-6': 24,
     'w-8 h-8': 32,
