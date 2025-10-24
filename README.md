@@ -75,9 +75,13 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
    npm run dev
    
 📡 Deployment
+
 • Frontend hosted on Vercel
+
 • Backend hosted on Render
+
 • MongoDB hosted on Atlas
+
 • Razorpay and Brevo integrated using API keys
 
 📬 Contact :
