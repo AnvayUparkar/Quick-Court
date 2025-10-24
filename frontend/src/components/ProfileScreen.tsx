@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import axios from 'axios';
 import api from "../api"; // Added import for api instance
-import Loader from "./Loader"; // Added import for Loader component
+import Loader from "./shared/Loader"; // Added import for Loader component
 
 const ProfileScreen = () => {
   const { user, token , updateUser } = useAuth();

@@ -77,3 +77,4 @@ export const updateCourt = (facilityId: string, courtId: string, courtData: any)
 export const deleteCourt = (facilityId: string, courtId: string) => api.delete(`/api/facilities/${facilityId}/courts/${courtId}`);
 export const addTimeSlot = (facilityId: string, courtId: string, slotData: any) => api.post(`/api/facilities/${facilityId}/courts/${courtId}/slots`, slotData);
 export const removeTimeSlot = (facilityId: string, courtId: string, slotId: string) => api.delete(`/api/facilities/${facilityId}/courts/${courtId}/slots/${slotId}`);
+export const requestOTP = (email: string) => api.post('/api/users/request-otp', { email });

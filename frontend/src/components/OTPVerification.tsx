@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 // import { requestOTP } from "../api" // Remove this line
-import Loader from "./Loader"
+import Loader from "./shared/Loader"
 
 export default function OTPVerification() {
   const [otp, setOtp] = useState("")

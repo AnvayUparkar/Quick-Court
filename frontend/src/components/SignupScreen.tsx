@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import { requestOTP } from "../api"
-import Loader from "./Loader"
+import Loader from "./shared/Loader"
 
 export default function SignupScreen() {
   const [name, setName] = useState("")
@@ -39,6 +39,7 @@ export default function SignupScreen() {
 
     try {
       const data = await signup(formData)
+      await requestOTP(email) // Call requestOTP after successful signup
       navigate(`/verify-otp?userId=${data.userId}&email=${email}`)
     } catch (err: any) {
       setError(err.response?.data?.message || err.message)

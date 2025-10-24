@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-import Loader from "./Loader"
+import Loader from "./shared/Loader"
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("")

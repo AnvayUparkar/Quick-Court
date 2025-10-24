@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
-import Loader from '../../components/Loader'; // Added import for Loader
+import Loader from '../../components/shared/Loader'; // Added import for Loader
 
 const AdminProfilePage: React.FC = () => {
   const { user, updateUser } = useAuth();
