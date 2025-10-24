@@ -23,12 +23,18 @@ QuickCourt is a full-stack web application designed to streamline legal workflow
 QuickCourt uses Brevo (formerly SendinBlue) for secure and reliable OTP delivery during user registration and login verification.
 
 ✅ Fast and free SMTP API for OTPs
+
 ✅ Custom HTML templates for email verification
+
 ✅ Secure token-based OTP validation
+
 💳 Payment Integration (via Razorpay)
 Razorpay integration allows users to pay court fees, lawyer consultation charges, or document processing fees directly through QuickCourt. The integration ensures secure transactions and real-time payment verification.
+
 ✅ Razorpay test and live modes supported
+
 ✅ Payment success/failure callbacks handled in Node.js backend
+
 ✅ Secure API key handling with environment variables (.env)
 
 🛠️ Environment Variables
@@ -44,8 +50,10 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 🚀 Installation
 1️⃣ Clone the repository:
    git clone https://github.com/anvayuparkar/QuickCourt.git
-2️⃣ Navigate to backend and frontend folders and install dependencies:
+   
+2️⃣ Navigate to backend and frontend folders and install dependencies
    npm install
+   
 3️⃣ Start backend and frontend:
    npm run dev
    
