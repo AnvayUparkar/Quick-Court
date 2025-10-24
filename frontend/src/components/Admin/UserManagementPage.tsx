@@ -72,7 +72,7 @@ const UserManagementPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100 p-8">
       <h1 className="text-4xl font-bold text-gray-800 mb-8">User Management</h1>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex space-x-4">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <input
           type="text"
           placeholder="Search by name or email"
@@ -95,7 +95,7 @@ const UserManagementPage: React.FC = () => {
       {filteredUsers.length === 0 ? (
         <p className="text-center text-gray-600">No users found.</p>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
