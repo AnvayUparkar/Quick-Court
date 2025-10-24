@@ -14,7 +14,8 @@ const FacilityApprovalPage: React.FC = () => {
 
   const fetchPendingFacilities = useCallback(async () => {
     try {
-      const response = await api.get('/admin/facilities/pending');
+      setLoading(true);
+      const response = await api.get('/api/admin/facilities/pending');
       setPendingFacilities(response.data.data);
     } catch (err: any) {
       console.error('Error fetching pending facilities:', err);
