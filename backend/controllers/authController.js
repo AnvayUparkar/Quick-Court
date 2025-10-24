@@ -13,6 +13,10 @@ const { sendOtpHandler, generateAndSendOtpLogic } = require('./otpController'); 
 // @route   POST /api/auth/signup
 // @access  Public
 exports.signup = catchAsync(async (req, res, next) => {
+    console.log("Signup request body:", req.body);
+    if (req.file) {
+        console.log("Signup request file:", req.file);
+    }
     const { name, email, password, role } = req.body;
 
     let user = await User.findOne({ email });
