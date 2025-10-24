@@ -1,4 +1,4 @@
-QuickCourt - Case Management and Legal Automation Platform
+QuickCourt - Court Booking and Management Platform
 
 QuickCourt is a full-stack web application designed to streamline legal workflows, including case filing, lawyer-client interactions, document management, and digital payments. The platform aims to bring transparency, speed, and convenience to the judicial process through automation and modern web technologies.
 
