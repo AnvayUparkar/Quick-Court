@@ -3,7 +3,6 @@
 import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-import { requestOTP } from "../api"
 import Loader from "./shared/Loader"
 
 export default function SignupScreen() {
