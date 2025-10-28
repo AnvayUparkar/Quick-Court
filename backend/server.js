@@ -50,14 +50,25 @@ app.use(
 // ----------------------------
 const apiRouter = express.Router();
 
-apiRouter.use('/payments', razorpayRoutes);
-apiRouter.use('/auth', require('./routes/authRoutes'));
-apiRouter.use('/users', require('./routes/userRoutes'));
-apiRouter.use('/facilities', require('./routes/facilityRoutes'));
-apiRouter.use('/bookings', require('./routes/bookingRoutes'));
-apiRouter.use('/reviews', require('./routes/reviewRoutes'));
-apiRouter.use('/courts', require('./routes/courtRoutes'));
-apiRouter.use('/admin', require('./routes/adminRoutes'));
+// Safe router mounting helper: logs failures when a mount path causes path-to-regexp errors
+function safeMount(parentRouter, mountPath, modulePath) {
+  try {
+    const handler = require(modulePath);
+    parentRouter.use(mountPath, handler);
+  } catch (err) {
+    console.error(`Failed to mount path '${mountPath}' from '${modulePath}':`, err && err.message ? err.message : err);
+    throw err;
+  }
+}
+
+safeMount(apiRouter, '/payments', './routes/razorpayRoutes');
+safeMount(apiRouter, '/auth', './routes/authRoutes');
+safeMount(apiRouter, '/users', './routes/userRoutes');
+safeMount(apiRouter, '/facilities', './routes/facilityRoutes');
+safeMount(apiRouter, '/bookings', './routes/bookingRoutes');
+safeMount(apiRouter, '/reviews', './routes/reviewRoutes');
+safeMount(apiRouter, '/courts', './routes/courtRoutes');
+safeMount(apiRouter, '/admin', './routes/adminRoutes');
 
 // ✅ Mount all API routes under /api
 app.use('/api', apiRouter);
