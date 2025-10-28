@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DataContext } from '../contexts/DataContext';
 import { useContext } from 'react';
 import type { DataContextType } from '../contexts/DataContext';
-import { CheckCircleIcon, CreditCardIcon, DevicePhoneMobileIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon } from '@heroicons/react/24/outline'; // Removed unused icons
 import Loader from './shared/Loader';
 
 // Add Razorpay type declarations at the top level
@@ -24,7 +24,7 @@ const PaymentScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [bookingData, setBookingData] = useState<any>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
+  // const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card'); // Removed as only Razorpay will be used
   const [processing, setProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const dataContext = useContext(DataContext) as DataContextType;
@@ -151,30 +151,30 @@ const PaymentScreen = () => {
     }
   };
 
-  const handlePayment = async () => {
-    setProcessing(true);
-    try {
-      // Find the actual court object by name (from bookingData.court)
-  const selectedCourtObj = courts.find((c: any) => c.name === bookingData.court && c.facilityId === (bookingData.venueId || bookingData.facilityId));
-      if (!selectedCourtObj) {
-        alert('Selected court not found.');
-        setProcessing(false);
-        return;
-      }
-      const payload = {
-        facilityId: bookingData.venueId || bookingData.facilityId,
-        courtId: selectedCourtObj._id,
-        date: new Date(bookingData.date).toISOString(),
-        timeSlot: bookingData.time,
-      };
-  await createBooking(payload);
-  sessionStorage.removeItem('bookingData');
-  setShowSuccess(true);
-    } catch (err) {
-      alert('Booking failed. Please try again.');
-    }
-    setProcessing(false);
-  };
+  // Removed handlePayment as it's not needed with Razorpay
+  // const handlePayment = async () => {
+  //   setProcessing(true);
+  //   try {
+  //     const selectedCourtObj = courts.find((c: any) => c.name === bookingData.court && c.facilityId === (bookingData.venueId || bookingData.facilityId));
+  //     if (!selectedCourtObj) {
+  //       alert('Selected court not found.');
+  //       setProcessing(false);
+  //       return;
+  //     }
+  //     const payload = {
+  //       facilityId: bookingData.venueId || bookingData.facilityId,
+  //       courtId: selectedCourtObj._id,
+  //       date: new Date(bookingData.date).toISOString(),
+  //       timeSlot: bookingData.time,
+  //     };
+  //     await createBooking(payload);
+  //     sessionStorage.removeItem('bookingData');
+  //     setShowSuccess(true);
+  //   } catch (err) {
+  //     alert('Booking failed. Please try again.');
+  //   }
+  //   setProcessing(false);
+  // };
 
   if (!bookingData) {
   return <div>Loading...</div>;
@@ -257,111 +257,11 @@ const PaymentScreen = () => {
             </div>
           </div>
 
-          {/* Payment Methods */}
+          {/* Payment Method - Only Razorpay */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Payment Method</h2>
             
-            <div className="space-y-4 mb-6">
-              {/* Credit/Debit Card */}
-              <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-emerald-300 transition duration-200">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="card"
-                  checked={selectedPaymentMethod === 'card'}
-                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-                  className="mr-3"
-                />
-                <CreditCardIcon className="h-6 w-6 text-gray-600 mr-3" />
-                <div>
-                  <div className="font-medium text-gray-900">Credit/Debit Card</div>
-                  <div className="text-sm text-gray-500">Visa, MasterCard, RuPay</div>
-                </div>
-              </label>
-
-              {/* UPI */}
-              <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-emerald-300 transition duration-200">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="upi"
-                  checked={selectedPaymentMethod === 'upi'}
-                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-                  className="mr-3"
-                />
-                <DevicePhoneMobileIcon className="h-6 w-6 text-gray-600 mr-3" />
-                <div>
-                  <div className="font-medium text-gray-900">UPI</div>
-                  <div className="text-sm text-gray-500">PhonePe, Google Pay, Paytm</div>
-                </div>
-              </label>
-
-              {/* Net Banking */}
-              <label className="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-emerald-300 transition duration-200">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="netbanking"
-                  checked={selectedPaymentMethod === 'netbanking'}
-                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
-                  className="mr-3"
-                />
-                <ComputerDesktopIcon className="h-6 w-6 text-gray-600 mr-3" />
-                <div>
-                  <div className="font-medium text-gray-900">Net Banking</div>
-                  <div className="text-sm text-gray-500">All major banks supported</div>
-                </div>
-              </label>
-            </div>
-
-            {/* Payment Form */}
-            {selectedPaymentMethod === 'card' && (
-              <div className="space-y-4 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Card Number
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="1234 5678 9012 3456"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Expiry Date
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      CVV
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="123"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cardholder Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-              )}
-              <div className="mt-8">
+            <div className="mt-8">
                 <button
                   className="w-full bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 disabled:opacity-50"
                   onClick={() => handleRazorpayPayment()}
@@ -370,50 +270,6 @@ const PaymentScreen = () => {
                   {loading ? <Loader size="w-5 h-5" color="border-white" /> : "Pay with Razorpay"}
                 </button>
               </div>
-
-            {selectedPaymentMethod === 'upi' && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  UPI ID
-                </label>
-                <input
-                  type="text"
-                  placeholder="yourname@paytm"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                />
-              </div>
-            )}
-
-            {selectedPaymentMethod === 'netbanking' && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Bank
-                </label>
-                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
-                  <option>Select your bank</option>
-                  <option>State Bank of India</option>
-                  <option>HDFC Bank</option>
-                  <option>ICICI Bank</option>
-                  <option>Axis Bank</option>
-                  <option>Punjab National Bank</option>
-                </select>
-              </div>
-            )}
-
-            <button
-              onClick={handlePayment}
-              disabled={processing}
-              className="w-full bg-emerald-600 text-white py-4 px-4 rounded-lg font-semibold hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {processing ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Processing Payment...
-                </div>
-              ) : (
-                `Confirm & Pay ₹${bookingData.totalPrice.toLocaleString()}`
-              )}
-            </button>
 
             <div className="mt-4 flex items-center justify-center space-x-2 text-sm text-gray-500">
               <CheckCircleIcon className="h-4 w-4 text-green-500" />
