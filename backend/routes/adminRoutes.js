@@ -20,14 +20,14 @@ router.use(protect, authorize('admin'));
 router.get('/dashboard', getDashboardStats);
 
 // User management routes
-router.get('/users/list', getUsers);
-router.get('/users/details/:id', getUser);
-router.put('/users/update/:id', upload.single('avatar'), updateUser);
-router.delete('/users/remove/:id', deleteUser);
-router.get('/users/bookings/:userId', getUserBookings);
+router.get('/users', getUsers);
+router.get('/users/:id', getUser);
+router.put('/users/:id', upload.single('avatar'), updateUser);
+router.delete('/users/:id', deleteUser);
+router.get('/users/:userId/bookings', getUserBookings);
 
 // Facility management routes
-router.get('/facilities/pending/list', getPendingFacilities);
-router.put('/facilities/approve/:id', approveFacility);
+router.get('/facilities/pending', getPendingFacilities);
+router.put('/facilities/:id/approve', approveFacility);
 
 module.exports = router;

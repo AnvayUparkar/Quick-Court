@@ -3,8 +3,8 @@ const { createOrder, verifyPayment, getPaymentDetails } = require('../controller
 const router = express.Router();
 
 // Payment management routes
-router.post('/orders/create', createOrder);
-router.post('/payments/verify', verifyPayment);
-router.get('/payments/details/:paymentId', getPaymentDetails);
+router.post('/order', createOrder);
+router.post('/verify', verifyPayment);
+router.get('/payment/:paymentId', getPaymentDetails);
 
 module.exports = router;
