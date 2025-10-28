@@ -56,8 +56,19 @@ function safeMount(parentRouter, mountPath, modulePath) {
     const handler = require(modulePath);
     parentRouter.use(mountPath, handler);
   } catch (err) {
-    console.error(`Failed to mount path '${mountPath}' from '${modulePath}':`, err && err.message ? err.message : err);
-    throw err;
+    // If a module or its routes contain an invalid path (e.g. a full URL like "https://..."),
+    // path-to-regexp will throw during mount. Log a helpful message and continue so the
+    // process doesn't crash in production; this prevents the "No open ports detected" symptom.
+    console.error(`Failed to mount path '${mountPath}' from '${modulePath}':`, err && err.stack ? err.stack : err);
+
+    if (typeof mountPath === 'string' && (mountPath.includes('://') || mountPath.startsWith('http'))) {
+      console.error(`Mount path '${mountPath}' looks like a URL — routes must be path strings (e.g. '/api'). Skipping mount to avoid crash.`);
+    }
+
+    // Don't re-throw in production/deploy environments so the server can start. The error
+    // remains logged; you should inspect the stack trace above to find the offending
+    // route or module and fix the malformed path (commonly '/:' with a missing name or a full URL).
+    return;
   }
 }
 
