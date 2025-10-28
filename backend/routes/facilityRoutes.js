@@ -22,11 +22,11 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../utils/multer'); // Assuming multer is configured for multiple files
 
 // User can rate a facility
-router.post('/:id/rate', protect, rateFacility);
+router.post('/rate/:id', protect, rateFacility);
 
 // Public routes for facilities and courts
-router.get('/', getFacilities);
-router.get('/owner/:ownerId', protect, authorize('facility_owner', 'admin'), getOwnerFacilities); // New route to get facilities by owner
+router.get('/all', getFacilities);
+router.get('/owner/:ownerId/facilities', protect, authorize('facility_owner', 'admin'), getOwnerFacilities);
 
 // Owner dashboard stats
 router.get('/owner/:ownerId/dashboard-stats', protect, authorize('facility_owner', 'admin'), getDashboardStats);
