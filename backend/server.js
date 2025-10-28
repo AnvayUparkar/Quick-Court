@@ -89,20 +89,20 @@ app.use((req, res, next) => {
     }
 });
 
-// Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+// // Serve static assets in production
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, '../../frontend/dist')));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../../frontend/dist', 'index.html'));
-  });
-} else {
-  // Fallback logger for debugging unhandled routes in development
-  app.use((req, res, next) => {
-    console.warn('⚠️ Unhandled route:', req.method, req.originalUrl);
-    res.status(404).json({ message: 'Route not found', path: req.originalUrl });
-  });
-}
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, '../../frontend/dist', 'index.html'));
+//   });
+// } else {
+//   // Fallback logger for debugging unhandled routes in development
+//   app.use((req, res, next) => {
+//     console.warn('⚠️ Unhandled route:', req.method, req.originalUrl);
+//     res.status(404).json({ message: 'Route not found', path: req.originalUrl });
+//   });
+// }
 
 // This is only for local development, Vercel will handle the port
 const PORT = process.env.PORT || 8000;
