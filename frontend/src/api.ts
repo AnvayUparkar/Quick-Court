@@ -36,16 +36,69 @@ api.interceptors.response.use(
   },
   (error) => {
     console.error('API Interceptor: Response error from:', error.config?.url, 'Status:', error.response?.status);
-    if (error.response?.status === 401) {
-      console.log('API Interceptor: 401 Unauthorized, clearing authentication data');
-      // Token expired or invalid
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      // Instead of redirecting immediately, re-throw the error to be handled by the component
-      // window.location.href = '/login';
+
+    const originalRequest = error.config;
+
+    // If no response or not 401, reject immediately
+    if (!error.response || error.response.status !== 401) {
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
+
+    // Avoid infinite loop
+    if (originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    // Refresh token flow
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (!refreshToken) {
+      // No refresh token available, clear storage and reject
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      return Promise.reject(error);
+    }
+
+    // Use a single refresh request for concurrent 401s
+    if ((api as any)._isRefreshing) {
+      return new Promise((resolve, reject) => {
+        (api as any)._refreshSubscribers.push((token: string) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          resolve(api(originalRequest));
+        });
+      });
+    }
+
+    (api as any)._isRefreshing = true;
+    (api as any)._refreshSubscribers = [];
+
+    return new Promise((resolve, reject) => {
+      api.post('/api/auth/refresh-token', { refreshToken })
+        .then((res) => {
+          const { token: newToken, refreshToken: newRefreshToken } = res.data;
+          localStorage.setItem('token', newToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
+          api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+
+          (api as any)._isRefreshing = false;
+          (api as any)._refreshSubscribers.forEach((cb: any) => cb(newToken));
+          (api as any)._refreshSubscribers = [];
+
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          resolve(api(originalRequest));
+        })
+        .catch((err) => {
+          (api as any)._isRefreshing = false;
+          (api as any)._refreshSubscribers = [];
+          // Clear auth state on failure
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('user');
+          reject(err);
+        });
+    });
+    
   }
 );
 

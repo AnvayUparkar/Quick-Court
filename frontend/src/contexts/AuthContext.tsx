@@ -64,6 +64,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('refreshToken');
                 }
+            } else if (!storedToken && storedRefreshToken) {
+                // If token missing but refresh token exists, try to refresh tokens
+                try {
+                    console.log('AuthContext: Attempting to refresh token using stored refreshToken');
+                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/refresh-token`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ refreshToken: storedRefreshToken })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const { token: newToken, refreshToken: newRefreshToken, user: refreshedUser } = data;
+                        localStorage.setItem('token', newToken);
+                        localStorage.setItem('refreshToken', newRefreshToken);
+                        localStorage.setItem('user', JSON.stringify({ ...refreshedUser, _id: refreshedUser._id || refreshedUser.id }));
+                        setToken(newToken);
+                        setRefreshToken(newRefreshToken);
+                        setUser({ ...refreshedUser, _id: refreshedUser._id || refreshedUser.id });
+                        console.log('AuthContext: Token refreshed successfully on load');
+                    } else {
+                        console.warn('AuthContext: Refresh token invalid or expired during load');
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('refreshToken');
+                        localStorage.removeItem('user');
+                    }
+                } catch (err) {
+                    console.error('AuthContext: Error while refreshing token on load', err);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('user');
+                }
             } else {
                 console.log('AuthContext: Missing required authentication data');
             }
