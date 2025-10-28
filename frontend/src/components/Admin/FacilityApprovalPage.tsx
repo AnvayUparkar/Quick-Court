@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Facility } from '../../types'; // Assuming you have a Facility type defined
 import api from '../../api';
 import Loader from '../../components/shared/Loader'; // Import the Loader component
+import LazyImage from '../../components/shared/LazyImage'; // Import LazyImage
 
 const FacilityApprovalPage: React.FC = () => {
   const { user } = useAuth();
@@ -81,7 +82,7 @@ const FacilityApprovalPage: React.FC = () => {
               <p className="text-gray-600 mb-4">Description: {facility.description}</p>
               {facility.photos && facility.photos.length > 0 && (
                 <div className="mb-4">
-                  <img src={facility.photos[0]} alt={facility.name} className="w-full h-48 object-cover rounded-md" />
+                  <LazyImage src={facility.photos[0]} alt={facility.name} className="w-full h-48 object-cover rounded-md" />
                 </div>
               )}
               <div className="flex justify-end space-x-4">

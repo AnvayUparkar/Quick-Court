@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPinIcon, StarIcon } from '@heroicons/react/24/solid';
 import { useData } from '../contexts/DataContext';
+import LazyImage from './shared/LazyImage'; // Import LazyImage
 
 const CourtListing = () => {
   const { facilities, fetchFacilities, reviews } = useData();
@@ -183,7 +184,7 @@ const CourtListing = () => {
                   if (minPrice <= 200) tags.push('Budget');
                   return (
                     <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 transition duration-200 hover:border-2 hover:border-indigo-500 hover:shadow-indigo-400">
-                      <img
+                      <LazyImage
                         src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/400')}
                         alt={facility.name}
                         className="w-full h-32 md:h-48 object-cover"

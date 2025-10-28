@@ -9,6 +9,7 @@ import ReviewForm from './ReviewForm'; // Import the new ReviewForm component
 import Loader from './shared/Loader'; // Import the Loader component
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
+import LazyImage from './shared/LazyImage'; // Import LazyImage
 
 const VenueDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -72,9 +73,9 @@ const VenueDetailsPage = () => {
           {/* Image Gallery */}
           <div className="relative h-96 bg-gray-200 flex items-center justify-center">
             {facility.primaryPhoto ? (
-              <img src={facility.primaryPhoto} alt={facility.name} className="w-full h-full object-cover" />
+              <LazyImage src={facility.primaryPhoto} alt={facility.name} className="w-full h-full object-cover" />
             ) : facility.photos && facility.photos.length > 0 ? (
-              <img src={facility.photos[0]} alt={facility.name} className="w-full h-full object-cover" />
+              <LazyImage src={facility.photos[0]} alt={facility.name} className="w-full h-full object-cover" />
             ) : (
               <PhotoIcon className="h-24 w-24 text-gray-400" />
             )}

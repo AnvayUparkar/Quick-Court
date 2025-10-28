@@ -32,6 +32,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { CheckCircleIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import Loader from './shared/Loader'; // Import the new Loader component
+import LazyImage from './shared/LazyImage'; // Import LazyImage
 
 const CourtDetails = () => {
   const { id } = useParams<{ id: string }>(); // This `id` is actually facilityId
@@ -161,7 +162,7 @@ const CourtDetails = () => {
               <div>
                 <div className="relative bg-gray-200 rounded-lg overflow-hidden" style={{ height: "300px" }}>
                   {facility.primaryPhoto || (facility.photos && facility.photos.length > 0) ? (
-                    <img
+                    <LazyImage
                       src={facility.primaryPhoto ? facility.primaryPhoto : facility.photos[selectedImageIndex] || "/placeholder.svg"}
                       alt={facility.name}
                       className="w-full h-full object-cover"

@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../api"; // Added import for api instance
 import Loader from "./shared/Loader.tsx";
+import LazyImage from "./shared/LazyImage"; // Import LazyImage
 
 const ProfileScreen = () => {
   const { user, token , updateUser } = useAuth();
@@ -88,7 +89,7 @@ const ProfileScreen = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="text-center mb-6">
                 <div className="relative mx-auto w-32 h-32 rounded-full overflow-hidden border-2 border-gray-200 mb-4">
-                  <img
+                  <LazyImage
                     src={avatarPreview || "https://via.placeholder.com/150"}
                     alt="Profile Avatar"
                     className="w-full h-full object-cover"

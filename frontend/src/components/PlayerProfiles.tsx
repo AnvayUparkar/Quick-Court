@@ -9,6 +9,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline"
 import { useData } from "../contexts/DataContext"
+import LazyImage from "./shared/LazyImage"; // Import LazyImage
 
 const PlayerProfiles = () => {
   const { players, searchPlayers } = useData()
@@ -169,7 +170,7 @@ const PlayerProfiles = () => {
                 <div className="p-6">
                   {/* Player Header */}
                   <div className="flex items-center space-x-4 mb-4">
-                    <img
+                    <LazyImage
                       src={player.image || "/placeholder.svg"}
                       alt={player.name}
                       className="w-16 h-16 rounded-full object-cover"

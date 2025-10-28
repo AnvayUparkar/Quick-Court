@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MapPinIcon, StarIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../contexts/AuthContext';
 import { useData } from '../contexts/DataContext'; // Import useData
+import LazyImage from './shared/LazyImage'; // Import LazyImage
 
 function ImageScroller({ images }: { images: string[] }) {
   const [index, setIndex] = useState(0);
@@ -28,7 +29,7 @@ function ImageScroller({ images }: { images: string[] }) {
         }}
       >
         {images.map((img: string, i: number) => (
-          <img
+          <LazyImage
             key={i}
             src={img}
             alt="Facility"
@@ -124,7 +125,7 @@ const Dashboard = () => {
 
               return (
                 <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <img
+                  <LazyImage
                     src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/300')}
                     alt={facility.name}
                     className="w-full h-32 object-cover"
@@ -210,13 +211,15 @@ const Dashboard = () => {
                     to={`/venue/${facility._id}`}
                     className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200 hover:border-2 hover:border-indigo-600"
                   >
-                    <img
+                    <LazyImage
                       src={facility.primaryPhoto || (facility.photos[0] || 'https://via.placeholder.com/400')}
                       alt={facility.name}
                       className="w-full h-48 object-cover"
                     />
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-2">{facility.name}</h3>
+                      <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition duration-200">
+                        {facility.name}
+                      </h3>
                       <div className="flex items-center space-x-1 text-sm text-gray-600 mb-2">
                         <MapPinIcon className="h-4 w-4" />
                         <span>{facility.location.address}</span>
@@ -246,7 +249,7 @@ const Dashboard = () => {
                   className="group"
                 >
                   <div className="relative overflow-hidden rounded-lg aspect-square">
-                    <img
+                    <LazyImage
                       src={sport.image}
                       alt={sport.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-300"

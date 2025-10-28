@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
 import Loader from '../../components/shared/Loader'; // Added import for Loader
+import LazyImage from '../../components/shared/LazyImage'; // Import LazyImage
 
 const AdminProfilePage: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -95,7 +96,7 @@ const AdminProfilePage: React.FC = () => {
         {/* Profile Avatar */}
         <div className="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center text-gray-500 text-sm overflow-hidden">
           {avatarPreview ? (
-            <img src={avatarPreview} alt="Profile" className="w-full h-full object-cover" />
+            <LazyImage src={avatarPreview} alt="Profile" className="w-full h-full object-cover" />
           ) : (
             <svg className="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

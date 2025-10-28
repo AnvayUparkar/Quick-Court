@@ -5,6 +5,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { MagnifyingGlassIcon, MapPinIcon, StarIcon } from "@heroicons/react/24/outline"
 import { useData } from "../contexts/DataContext"
+import LazyImage from "./shared/LazyImage"; // Import LazyImage
 
 const SearchExplore = () => {
   const [searchQuery, setSearchQuery] = useState("")
@@ -88,7 +89,7 @@ const SearchExplore = () => {
                       className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition duration-200"
                       onClick={() => setSearchResults([])}
                     >
-                      <img
+                      <LazyImage
                         src={result.image || "/placeholder.svg"}
                         alt={result.name}
                         className="w-12 h-12 rounded-lg object-cover"
@@ -151,7 +152,7 @@ const SearchExplore = () => {
               {sportsCategories.map((sport) => (
                 <Link key={sport.name} to={`/courts?sport=${sport.name}`} className="group flex-shrink-0">
                   <div className="relative w-24 h-24 mx-auto mb-3">
-                    <img
+                    <LazyImage
                       src={sport.image || "/placeholder.svg"}
                       alt={sport.name}
                       className="w-full h-full rounded-2xl object-cover group-hover:scale-105 transition duration-300"
@@ -192,7 +193,7 @@ const SearchExplore = () => {
                     className="flex-shrink-0 w-72 lg:w-auto bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 group"
                   >
                     <div className="relative h-48 overflow-hidden">
-                      <img
+                      <LazyImage
                         src={facility.primaryPhoto || (facility.photos && facility.photos.length > 0 ? facility.photos[0] : "/placeholder.svg")}
                         alt={facility.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-300"

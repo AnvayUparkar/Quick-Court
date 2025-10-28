@@ -5,6 +5,7 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../contexts/DataContext';
 import Loader from '../../components/shared/Loader'; // Import the Loader component
+import LazyImage from '../../components/shared/LazyImage'; // Import LazyImage
 
 interface Location { 
   address: string;
@@ -321,7 +322,7 @@ const FacilityManagementPage = () => {
           {facilities.length > 0 ? (
             facilities.map((facility) => (
               <div key={facility._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg hover:border-2 hover:border-indigo-500 transition duration-200">
-                <img
+                <LazyImage
                   src={facility.primaryPhoto 
                        ? `${facility.primaryPhoto}?v=${new Date().getTime()}`
                        : facility.photos && facility.photos.length > 0 
@@ -517,7 +518,7 @@ const FacilityManagementPage = () => {
                       <div className="flex flex-wrap gap-2 mt-1">
                         {formData.currentPhotoUrls.map((url, index) => (
                           <div key={index} className="relative">
-                            <img 
+                            <LazyImage 
                               src={url} 
                               alt={`Facility ${index + 1}`}
                               className={`w-16 h-16 object-cover rounded border cursor-pointer ${formData.primaryPhotoUrl === url ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-300'}`}
