@@ -17,16 +17,17 @@ const router = express.Router();
 // All admin routes are protected and require 'admin' role
 router.use(protect, authorize('admin'));
 
-router.get('/dashboard-stats', getDashboardStats);
-router.route('/users').get(getUsers);
-router.route('/users/:id')
-    .get(getUser)
-    .put(upload.single('avatar'), updateUser) // Add multer middleware for avatar upload
-    .delete(deleteUser);
+router.get('/dashboard', getDashboardStats);
 
-router.get('/users/:userId/bookings', getUserBookings); // New route for admin to view user bookings
+// User management routes
+router.get('/users/list', getUsers);
+router.get('/users/details/:id', getUser);
+router.put('/users/update/:id', upload.single('avatar'), updateUser);
+router.delete('/users/remove/:id', deleteUser);
+router.get('/users/bookings/:userId', getUserBookings);
 
-router.get('/facilities/pending', getPendingFacilities);
-router.put('/facilities/:id/approve', approveFacility);
+// Facility management routes
+router.get('/facilities/pending/list', getPendingFacilities);
+router.put('/facilities/approve/:id', approveFacility);
 
 module.exports = router;

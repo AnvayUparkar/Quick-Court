@@ -21,25 +21,27 @@ const {
 const { protect, authorize } = require('../middleware/authMiddleware');
 const upload = require('../utils/multer'); // Assuming multer is configured for multiple files
 
-// User can rate a facility
+// Public routes
+router.get('/list', getFacilities); // Changed from '/all' to '/list'
+router.get('/details/:id', getFacility); // Changed from '/:id' to '/details/:id'
+
+// User rating route
 router.post('/rate/:id', protect, rateFacility);
 
-// Public routes for facilities and courts
-router.get('/all', getFacilities);
+// Owner specific routes
 router.get('/owner/:ownerId/facilities', protect, authorize('facility_owner', 'admin'), getOwnerFacilities);
+router.get('/owner/:ownerId/dashboard', protect, authorize('facility_owner', 'admin'), getDashboardStats);
 
-// Owner dashboard stats
-router.get('/owner/:ownerId/dashboard-stats', protect, authorize('facility_owner', 'admin'), getDashboardStats);
-router.get('/:id', getFacility);
-router.get('/:facilityId/courts', getFacilityCourts);
-router.get('/courts/:id', getCourt);
+// Court related routes
+router.get('/facility/:facilityId/courts', getFacilityCourts); // Changed from '/:facilityId/courts'
+router.get('/courts/details/:id', getCourt); // Changed from '/courts/:id'
 
-// Facility Owner routes
-router.post('/', protect, authorize('facility_owner', 'admin'), upload.array('photos', 10), createFacility); // Allow up to 10 photos
-router.put('/:id', protect, authorize('facility_owner', 'admin'), upload.array('photos', 10), updateFacility); // Allow up to 10 photos
-router.delete('/:id', protect, authorize('facility_owner', 'admin'), deleteFacility);
+// Facility Owner management routes
+router.post('/create', protect, authorize('facility_owner', 'admin'), upload.array('photos', 10), createFacility);
+router.put('/update/:id', protect, authorize('facility_owner', 'admin'), upload.array('photos', 10), updateFacility);
+router.delete('/remove/:id', protect, authorize('facility_owner', 'admin'), deleteFacility);
 
-// Mount Court Routes
-router.use('/:facilityId/courts', require('./courtRoutes'));
+// Mount Court Routes with specific base path
+router.use('/facility/:facilityId/courts', require('./courtRoutes'));
 
 module.exports = router;

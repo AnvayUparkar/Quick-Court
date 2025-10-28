@@ -42,18 +42,21 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'x-rth-fingerprint-id'],
   }));
   
-// Mount Routes
-app.use('/api/razorpay', razorpayRoutes);
+// API Routes Configuration
+const apiRouter = express.Router();
 
-// Mount Auth routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/facilities', require('./routes/facilityRoutes'));
+// Mount all routes under /api
+apiRouter.use('/payments', razorpayRoutes);
+apiRouter.use('/auth', require('./routes/authRoutes'));
+apiRouter.use('/users', require('./routes/userRoutes'));
+apiRouter.use('/facilities', require('./routes/facilityRoutes'));
+apiRouter.use('/bookings', require('./routes/bookingRoutes'));
+apiRouter.use('/reviews', require('./routes/reviewRoutes'));
+apiRouter.use('/courts', require('./routes/courtRoutes'));
+apiRouter.use('/admin', require('./routes/adminRoutes'));
 
-app.use('/api/bookings', require('./routes/bookingRoutes'));
-app.use('/api/reviews', require('./routes/reviewRoutes'));
-app.use('/api/courts', require('./routes/courtRoutes')); // Mount court routes
-app.use('/api/admin', require('./routes/adminRoutes'));
+// Mount the API router
+app.use('/api', apiRouter);
 
 // Connect to MongoDB
 // mongoose.connect(process.env.MONGO_URI)

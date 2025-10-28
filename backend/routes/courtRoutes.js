@@ -13,16 +13,16 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Public routes
-router.get('/facility/:facilityId', getFacilityCourts); // Get all courts for a specific facility
-router.get('/:id', getCourt); // Get a single court by ID
+router.get('/list/:facilityId', getFacilityCourts); // Changed from '/facility/:facilityId'
+router.get('/details/:id', getCourt); // Changed from '/:id'
 
 // Private routes for Facility Owners
-router.post('/', protect, authorize('facility_owner'), addCourt); // Add a new court
-router.put('/:id', protect, authorize('facility_owner'), updateCourt); // Update a court
-router.delete('/:id', protect, authorize('facility_owner'), deleteCourt); // Delete a court
+router.post('/create', protect, authorize('facility_owner'), addCourt); // Changed from '/'
+router.put('/update/:id', protect, authorize('facility_owner'), updateCourt); // Changed from '/:id'
+router.delete('/remove/:id', protect, authorize('facility_owner'), deleteCourt); // Changed from '/:id'
 
 // Time slot management
-router.post('/:id/slots', protect, authorize('facility_owner'), addTimeSlot); // Add a new time slot
-router.delete('/:id/slots/:slotId', protect, authorize('facility_owner'), removeTimeSlot); // Remove a time slot
+router.post('/slots/add/:courtId', protect, authorize('facility_owner'), addTimeSlot); // Changed structure
+router.delete('/slots/remove/:courtId/:slotId', protect, authorize('facility_owner'), removeTimeSlot); // Changed structure
 
 module.exports = router;

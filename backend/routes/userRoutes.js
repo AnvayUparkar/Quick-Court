@@ -5,9 +5,9 @@ const { protect, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-router.route('/profile')
-    .get(protect, getUserProfile)
-    .put(protect, upload.single('avatar'), updateUserProfile);
-router.get('/my-bookings', protect, getMyBookings);
+// User profile routes
+router.get('/profile/details', protect, getUserProfile);
+router.put('/profile/update', protect, upload.single('avatar'), updateUserProfile);
+router.get('/bookings/list', protect, getMyBookings);
 
 module.exports = router;
