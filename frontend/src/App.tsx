@@ -1,36 +1,40 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext'; // Import DataProvider
 import LoginScreen from './components/LoginScreen';
 import SignupScreen from './components/SignupScreen';
 import OTPVerification from './components/OTPVerification';
-import Dashboard from './components/Dashboard'; // Placeholder for dashboard
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfileScreen from './components/ProfileScreen';
-import VenueDetailsPage from './components/VenueDetailsPage';
-import VenueBookingPage from './components/VenueBookingPage'; // Added import for VenueBookingPage
-import CourtListing from './components/CourtListing'; // Import CourtListing
-import PaymentScreen from './components/PaymentScreen'; // Import PaymentScreen
-import AdminDashboard from './components/Admin/AdminDashboard';
-import FacilityApprovalPage from './components/Admin/FacilityApprovalPage';
-import UserManagementPage from './components/Admin/UserManagementPage';
-import AdminProfilePage from './components/Admin/AdminProfilePage';
-import UserBookingsPage from './components/Admin/UserBookingsPage'; // Import the new UserBookingsPage component
-// Facility Owner Imports
-import OwnerDashboard from './components/FacilityOwner/OwnerDashboard';
-import FacilityManagementPage from './components/FacilityOwner/FacilityManagementPage';
-import CourtManagementPage from './components/FacilityOwner/CourtManagementPage';
-import BookingOverviewPage from './components/FacilityOwner/BookingOverviewPage';
-// import Header from './components/shared/Header'; // Remove direct Header import
 import Layout from './components/shared/Layout'; // Import the new Layout component
+import Loader from './components/shared/Loader';
+
+// Lazy-load heavy route components to reduce initial bundle size
+const Dashboard = React.lazy(() => import('./components/Dashboard'));
+const VenueDetailsPage = React.lazy(() => import('./components/VenueDetailsPage'));
+const VenueBookingPage = React.lazy(() => import('./components/VenueBookingPage'));
+const CourtListing = React.lazy(() => import('./components/CourtListing'));
+const PaymentScreen = React.lazy(() => import('./components/PaymentScreen'));
+const AdminDashboard = React.lazy(() => import('./components/Admin/AdminDashboard'));
+const FacilityApprovalPage = React.lazy(() => import('./components/Admin/FacilityApprovalPage'));
+const UserManagementPage = React.lazy(() => import('./components/Admin/UserManagementPage'));
+const AdminProfilePage = React.lazy(() => import('./components/Admin/AdminProfilePage'));
+const UserBookingsPage = React.lazy(() => import('./components/Admin/UserBookingsPage'));
+// Facility Owner Imports (lazy)
+const OwnerDashboard = React.lazy(() => import('./components/FacilityOwner/OwnerDashboard'));
+const FacilityManagementPage = React.lazy(() => import('./components/FacilityOwner/FacilityManagementPage'));
+const CourtManagementPage = React.lazy(() => import('./components/FacilityOwner/CourtManagementPage'));
+const BookingOverviewPage = React.lazy(() => import('./components/FacilityOwner/BookingOverviewPage'));
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         {/* <Header /> Moved Header to Layout component */}
-        <DataProvider> 
+        <DataProvider>
           <Layout> {/* Wrap all routes with Layout */}
+            <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><Loader size="w-12 h-12" color="border-blue-600" /></div>}>
             <Routes>
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/signup" element={<SignupScreen />} />
@@ -60,6 +64,7 @@ function App() {
               {/* Default/Home Route (public) */}
               <Route path="/" element={<Dashboard />} />
             </Routes>
+            </Suspense>
           </Layout>
         </DataProvider>
       </AuthProvider>
