@@ -36,12 +36,12 @@ function App() {
               <Route path="/signup" element={<SignupScreen />} />
               <Route path="/verify-otp" element={<OTPVerification />} />
 
-              {/* Protected Routes */}
-              <Route path="/dashboard" element={<ProtectedRoute element={Dashboard} />} />
+              {/* Public Dashboard (visible without login) */}
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<ProtectedRoute element={ProfileScreen} />} />
-              <Route path="/venue/:id" element={<ProtectedRoute element={VenueDetailsPage} />} />
-              <Route path="/venue-booking/:facilityId/court/:courtId" element={<ProtectedRoute element={VenueBookingPage} />} />
-              <Route path="/courts" element={<ProtectedRoute element={CourtListing} />} /> {/* Add Courts Listing Route */}
+              <Route path="/venue/:id" element={<VenueDetailsPage />} />
+              <Route path="/venue-booking/:facilityId/court/:courtId" element={<VenueBookingPage />} />
+              <Route path="/courts" element={<CourtListing />} /> {/* Add Courts Listing Route */}
               <Route path="/payment" element={<ProtectedRoute element={PaymentScreen} />} /> {/* Add Payment Route */}
 
               {/* Admin Routes */}
@@ -57,8 +57,8 @@ function App() {
               <Route path="/owner/facilities/:facilityId/courts" element={<ProtectedRoute element={CourtManagementPage} ownerOnly />} />
               <Route path="/owner/bookings" element={<ProtectedRoute element={BookingOverviewPage} ownerOnly />} />
 
-              {/* Default/Home Route */}
-              <Route path="/" element={<ProtectedRoute element={Dashboard} />} />
+              {/* Default/Home Route (public) */}
+              <Route path="/" element={<Dashboard />} />
             </Routes>
           </Layout>
         </DataProvider>

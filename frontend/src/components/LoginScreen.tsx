@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import Loader from "./shared/Loader"
 
@@ -11,6 +11,8 @@ export default function LoginScreen() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   // Array of image URLs for the left side
   const images = [
@@ -29,8 +31,18 @@ export default function LoginScreen() {
     setError(null)
     setLoading(true)
     try {
-      await login(email, password)
-      // Redirect to home or dashboard after successful login (handled by AuthContext)
+      const user = await login(email, password, { skipRedirect: true })
+      // If a redirect query param is present (e.g. ?redirect=/payment), honor it
+      const params = new URLSearchParams(location.search)
+      const redirect = params.get('redirect')
+      if (redirect) {
+        navigate(redirect)
+      } else {
+        // Fallback: role-based navigation
+        if (user?.role === 'admin') navigate('/admin/dashboard')
+        else if (user?.role === 'facility_owner') navigate('/owner/dashboard')
+        else navigate('/')
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || err.message)
     } finally {

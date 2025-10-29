@@ -116,11 +116,6 @@ const VenueBookingPage = () => {
       setBookingLoading(true)
       setError(null)
 
-      if (!user) {
-        navigate('/login')
-        return
-      }
-
       if (!facility || !court || !selectedDate || !selectedTimeSlot) {
         setError("Please select a date and time slot.")
         return
@@ -147,8 +142,15 @@ const VenueBookingPage = () => {
         name: user?.name,
         email: user?.email
       };
-      
+
       sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
+
+      // If user not authenticated, redirect to login and include redirect param so user returns to payment after login
+      if (!user) {
+        navigate('/login?redirect=/payment')
+        return
+      }
+
       navigate('/payment');
     } catch (err: any) {
       setError(err.message || "An error occurred while processing your booking.")

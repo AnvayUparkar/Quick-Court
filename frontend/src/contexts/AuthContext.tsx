@@ -20,12 +20,17 @@ interface AuthContextType {
     token: string | null;
     refreshToken: string | null;
     loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string, options?: { skipRedirect?: boolean }) => Promise<any>;
     signup: (userData: FormData) => Promise<any>;
     verifyOtp: (email: string, otp: string) => Promise<any>; // Changed userId to email
     resendOtp: (email: string) => Promise<any>; // Changed userId to email
     logout: () => void;
     updateUser: (userData: User) => void; // Added updateUser function
+    // Modal helpers to open a login/signup modal from anywhere
+    openAuthModal: (mode?: 'login' | 'signup', redirectAfterLogin?: string | null) => void;
+    closeAuthModal: () => void;
+    isAuthModalOpen?: boolean;
+    authModalMode?: 'login' | 'signup';
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -35,6 +40,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(null);
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [authModalMode, setAuthModalMode] = useState<'login' | 'signup'>('login');
+    const [redirectAfterLogin, setRedirectAfterLogin] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/auth`; 
@@ -106,7 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loadUser();
     }, []);
 
-    const login = async (email: string, password: string) => { // Explicitly type parameters
+    const login = async (email: string, password: string, options?: { skipRedirect?: boolean }) => { // Explicitly type parameters
         console.log('AuthContext: Login attempt for email:', email);
         const response = await axios.post(`${API_URL}/login`, { email, password });
         const { token, refreshToken, user } = response.data;
@@ -120,6 +128,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({ ...user, _id: user._id || user.id }); // Ensure _id is always set
         console.log('AuthContext: User data stored and state updated');
         
+        // If caller requested to handle redirect themselves, return user and avoid navigating here
+        if (options?.skipRedirect) {
+            return user;
+        }
+
+        // If a redirect was requested before login (e.g. booking -> payment), honor it
+        if (redirectAfterLogin) {
+            const redirectTo = redirectAfterLogin;
+            setRedirectAfterLogin(null);
+            setIsAuthModalOpen(false);
+            console.log('AuthContext: Redirecting to saved path after login:', redirectTo);
+            navigate(redirectTo);
+            return;
+        }
+
         // Redirect based on user role
         if (user.role === 'admin') {
             console.log('AuthContext: Redirecting to admin dashboard');
@@ -131,6 +154,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             console.log('AuthContext: Redirecting to home page');
             navigate('/');
         }
+        return user;
+    };
+
+    const openAuthModal = (mode: 'login' | 'signup' = 'login', redirect?: string | null) => {
+        setAuthModalMode(mode);
+        setRedirectAfterLogin(redirect || null);
+        setIsAuthModalOpen(true);
+    };
+
+    const closeAuthModal = () => {
+        setIsAuthModalOpen(false);
+        setRedirectAfterLogin(null);
     };
 
     const signup = async (userData: FormData) => {
@@ -178,6 +213,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         resendOtp, // Add resendOtp to the context value
         logout,
         updateUser, // Added updateUser to the context value
+        openAuthModal,
+        closeAuthModal,
+        isAuthModalOpen,
+        authModalMode,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
