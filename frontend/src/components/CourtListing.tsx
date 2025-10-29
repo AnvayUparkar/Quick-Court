@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { MapPinIcon, StarIcon } from '@heroicons/react/24/solid';
 import { useData } from '../contexts/DataContext';
 
@@ -20,6 +20,19 @@ const CourtListing = () => {
   useEffect(() => {
     fetchFacilities();
   }, [fetchFacilities]);
+
+  // Read URL query params to pre-fill filters (e.g., ?sport=football)
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const sportParam = params.get('sport');
+    if (sportParam) {
+      setFilters(prev => ({ ...prev, sport: sportParam }));
+      // Pre-fill the search box with the sport name (capitalized) to highlight results
+      const cap = sportParam.charAt(0).toUpperCase() + sportParam.slice(1);
+      setSearchQuery(cap);
+    }
+  }, [location.search]);
 
   const uniqueLocations = Array.from(new Set(facilities.map(f => f.location.address.split(',')[0]))).filter(Boolean);
 
