@@ -26,6 +26,10 @@ const OwnerDashboard = React.lazy(() => import('./components/FacilityOwner/Owner
 const FacilityManagementPage = React.lazy(() => import('./components/FacilityOwner/FacilityManagementPage'));
 const CourtManagementPage = React.lazy(() => import('./components/FacilityOwner/CourtManagementPage'));
 const BookingOverviewPage = React.lazy(() => import('./components/FacilityOwner/BookingOverviewPage'));
+// Compliance / Info pages
+const Terms = React.lazy(() => import('./components/Terms'));
+const Privacy = React.lazy(() => import('./components/Privacy'));
+const Refund = React.lazy(() => import('./components/Refund'));
 
 function App() {
   return (
@@ -63,6 +67,10 @@ function App() {
 
               {/* Default/Home Route (public) */}
               <Route path="/" element={<Dashboard />} />
+              {/* Compliance / static pages */}
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/refund" element={<Refund />} />
             </Routes>
             </Suspense>
           </Layout>
