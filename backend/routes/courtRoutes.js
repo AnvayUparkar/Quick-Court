@@ -10,7 +10,7 @@ const {
 } = require('../controllers/courtController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // Public routes
 router.get('/facility/:facilityId', getFacilityCourts); // Get all courts for a specific facility

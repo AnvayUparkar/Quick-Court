@@ -10,6 +10,7 @@ const CourtManagementPage = () => {
     const [error, setError] = useState(null);
     const [isCourtModalOpen, setIsCourtModalOpen] = useState(false);
     const [isSlotModalOpen, setIsSlotModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [currentCourt, setCurrentCourt] = useState(null);
     const [courtFormData, setCourtFormData] = useState({
         name: '',
@@ -129,8 +130,10 @@ const CourtManagementPage = () => {
     const handleCourtSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        setIsSubmitting(true);
         if (!facilityId) {
             setError('No facility ID available');
+            setIsSubmitting(false);
             return;
         }
 
@@ -168,6 +171,8 @@ const CourtManagementPage = () => {
         } catch (err) {
             console.error('handleCourtSubmit: Error saving court:', err);
             setError(err.response?.data?.message || 'Failed to save court.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -301,15 +306,31 @@ const CourtManagementPage = () => {
 
                                 <div className="mb-4">
                                     <h3 className="text-sm font-medium text-gray-900 mb-2">Operating Hours:</h3>
-                                    {isEveryday ? (
-                                        <p className="text-xs text-gray-600">Everyday: {everydayHours.open} - {everydayHours.close}</p>
-                                    ) : (
-                                        <ul className="text-xs text-gray-600 space-y-1">
-                                            {court.operatingHours.map((oh, idx) => (
-                                                <li key={idx}>{oh.day}: {oh.open} - {oh.close}</li>
-                                            ))}
-                                        </ul>
-                                    )}
+                                    {(() => {
+                                        // Check if court has same hours for all days
+                                        const hasAllDays = daysOfWeek.every(day =>
+                                            court.operatingHours.some(oh => oh.day === day)
+                                        );
+                                        const allSameHours = hasAllDays && court.operatingHours.length >= 7 &&
+                                            court.operatingHours.every(oh =>
+                                                oh.open === court.operatingHours[0]?.open &&
+                                                oh.close === court.operatingHours[0]?.close
+                                            );
+                                        if (allSameHours && court.operatingHours.length > 0) {
+                                            return (
+                                                <p className="text-xs text-gray-600">
+                                                    Everyday: {court.operatingHours[0].open} - {court.operatingHours[0].close}
+                                                </p>
+                                            );
+                                        }
+                                        return (
+                                            <ul className="text-xs text-gray-600 space-y-1">
+                                                {court.operatingHours.map((oh, idx) => (
+                                                    <li key={idx}>{oh.day}: {oh.open} - {oh.close}</li>
+                                                ))}
+                                            </ul>
+                                        );
+                                    })()}
                                 </div>
 
                                 <div className="mb-4">
@@ -537,14 +558,16 @@ const CourtManagementPage = () => {
                                     type="button"
                                     onClick={() => setIsCourtModalOpen(false)}
                                     className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition-colors"
+                                    disabled={isSubmitting}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isSubmitting}
                                 >
-                                    {currentCourt ? 'Update Court' : 'Create Court'}
+                                    {isSubmitting ? 'Saving...' : (currentCourt ? 'Update Court' : 'Create Court')}
                                 </button>
                             </div>
                         </form>
