@@ -53,8 +53,8 @@ async function sendOtpHandler(req, res) {
     if (result.error === "Please wait before resending OTP") {
       return res.status(429).json({ error: result.error });
     } else if (result.error === "Email is required") {
-        return res.status(400).json({ error: result.error });
-    } 
+      return res.status(400).json({ error: result.error });
+    }
     return res.status(500).json({ error: result.error });
   }
 }
