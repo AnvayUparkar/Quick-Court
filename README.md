@@ -2,7 +2,7 @@ QuickCourt - Court Booking and Management Platform
 
 QuickCourt is a full-stack web application designed to streamline sports court booking workflows, including court scheduling, user management, real-time availability tracking, and digital payments. The platform aims to bring transparency, speed, and convenience to the booking process through automation and modern web technologies.
 
-🚀 Features
+Features
 
 • Secure user authentication (Admin and Player roles)
 
@@ -18,7 +18,7 @@ QuickCourt is a full-stack web application designed to streamline sports court b
 
 • Admin panel for court and booking management
 
-⚙️ Tech Stack
+Tech Stack
 • Frontend: React.js + Tailwind CSS
 
 • Backend: Node.js + Express.js
@@ -31,23 +31,25 @@ QuickCourt is a full-stack web application designed to streamline sports court b
 
 • Payments: Razorpay Payment Gateway
 
-🧩 OTP Verification (via Brevo)
+OTP Verification (via Brevo)
+
 QuickCourt uses Brevo (formerly SendinBlue) for secure and reliable OTP delivery during user registration and login verification.
 
-✅ Fast and free SMTP API for OTPs
+Fast and free SMTP API for OTPs
 
-✅ Custom HTML templates for email verification
+Custom HTML templates for email verification
 
-✅ Secure token-based OTP validation
+Secure token-based OTP validation
 
-💳 Payment Integration (via Razorpay)
+Payment Integration (via Razorpay)
+
 Razorpay integration allows users to pay court fees, lawyer consultation charges, or document processing fees directly through QuickCourt. The integration ensures secure transactions and real-time payment verification.
 
-✅ Razorpay test and live modes supported
+Razorpay test and live modes supported
 
-✅ Payment success/failure callbacks handled in Node.js backend
+Payment success/failure callbacks handled in Node.js backend
 
-✅ Secure API key handling with environment variables (.env)
+Secure API key handling with environment variables (.env)
 
 🛠️ Environment Variables
 To run QuickCourt locally, create a `.env` file in the backend directory and add the following:
@@ -63,18 +65,18 @@ RAZORPAY_KEY_ID=your_razorpay_key_id
 
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 
-🚀 Installation
+Installation
 
-1️⃣ Clone the repository:
+Clone the repository:
    git clone https://github.com/anvayuparkar/QuickCourt.git
    
-2️⃣ Navigate to backend and frontend folders and install dependencies
+Navigate to backend and frontend folders and install dependencies
    npm install
    
-3️⃣ Start backend and frontend:
+Start backend and frontend:
    npm run dev
    
-📡 Deployment
+Deployment
 
 • Frontend hosted on Vercel
 
@@ -84,9 +86,9 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 
 • Razorpay and Brevo integrated using API keys
 
-📬 Contact :
-Developed by Anvay Uparkar, Sanam , Yeshvi
-📧 Email: 
+Contact :
+   Developed by Anvay Uparkar, Sanam , Yeshvi
+Email: 
 - anvaymuparkar@gmail.com
 - sanamjbhatia@gmail.com
 - yeshvi.chandiramani@gmail.com
