@@ -51,8 +51,8 @@ Payment success/failure callbacks handled in Node.js backend
 
 Secure API key handling with environment variables (.env)
 
-🛠️ Environment Variables
-To run QuickCourt locally, create a `.env` file in the backend directory and add the following:
+Environment Variables
+   To run QuickCourt locally, create a `.env` file in the backend directory and add the following:
 
 PORT=5000
 MONGO_URI=your_mongodb_uri
