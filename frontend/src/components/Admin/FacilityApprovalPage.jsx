@@ -33,7 +33,7 @@ const FacilityApprovalPage = () => {
 
     const handleApproval = useCallback(async (facilityId, approved) => {
         try {
-            await api.put(`/admin/facilities/${facilityId}/approve`, {
+            await api.put(`/api/admin/facilities/${facilityId}/approve`, {
                 approved,
                 comment: '', // Add a comment if required
             });
