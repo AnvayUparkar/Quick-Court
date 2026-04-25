@@ -27,9 +27,6 @@ exports.getUserProfile = catchAsync(async (req, res, next) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const cloudinary = require('../config/cloudinary');
-const fs = require('fs');
-const { promisify } = require('util');
-const unlinkAsync = promisify(fs.unlink);
 
 exports.updateUserProfile = catchAsync(async (req, res, next) => {
     const user = await User.findById(req.user.id);
@@ -41,13 +38,11 @@ exports.updateUserProfile = catchAsync(async (req, res, next) => {
         // Handle avatar upload
         if (req.file) {
             // Upload to Cloudinary
-            const result = await cloudinary.uploader.upload(req.file.path, {
+            const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`, {
                 folder: 'quickcourt/avatars',
                 resource_type: 'image'
             });
             user.avatar = result.secure_url;
-            // Remove local file
-            await unlinkAsync(req.file.path);
         } else if (req.body.avatar) {
             user.avatar = req.body.avatar;
         }

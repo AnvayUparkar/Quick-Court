@@ -4,7 +4,6 @@ const Booking = require('../models/Booking');
 const Court = require('../models/Court');
 const catchAsync = require('../middleware/catchAsync');
 const cloudinary = require('../config/cloudinary'); // Import cloudinary
-const fs = require('fs'); // Import file system module
 
 // @desc    Get global statistics (Admin Dashboard)
 // @route   GET /api/admin/dashboard-stats
@@ -82,17 +81,13 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     if (req.file) {
         try {
             // Upload image to cloudinary
-            const result = await cloudinary.uploader.upload(req.file.path, {
+            const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`, {
                 folder: 'avatars',
                 width: 150,
                 height: 150,
                 crop: 'fill'
             });
             user.avatar = result.secure_url;
-            // Delete file from local storage after successful upload
-            fs.unlink(req.file.path, (err) => {
-                if (err) console.error('Error deleting local file:', err);
-            });
         } catch (error) {
             console.error('Cloudinary upload error:', error);
             return res.status(500).json({ message: 'Image upload failed' });

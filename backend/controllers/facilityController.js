@@ -2,21 +2,6 @@ const Facility = require('../models/Facility');
 const Court = require('../models/Court');
 const catchAsync = require('../middleware/catchAsync');
 const cloudinary = require('../config/cloudinary');
-const fs = require('fs');
-const { promisify } = require('util');
-const unlinkAsync = promisify(fs.unlink);
-
-// Helper function to safely delete local files
-const safeUnlink = async (filePath) => {
-    try {
-        if (fs.existsSync(filePath)) {
-            await unlinkAsync(filePath);
-            console.log('Successfully deleted local file:', filePath);
-        }
-    } catch (error) {
-        console.log('Warning: Could not delete local file:', filePath, error.message);
-    }
-};
 
 // Helper function to extract Cloudinary public ID from URL
 const extractPublicId = (url) => {
@@ -148,22 +133,16 @@ exports.createFacility = catchAsync(async (req, res, next) => {
         
         for (const file of req.files) {
             try {
-                console.log('Uploading file:', file.originalname);
-                const result = await cloudinary.uploader.upload(file.path, {
+                console.log('Uploading file buffer:', file.originalname);
+                const result = await cloudinary.uploader.upload(`data:${file.mimetype};base64,${file.buffer.toString('base64')}`, {
                     folder: 'quickcourt/facilities',
                     resource_type: 'auto'
                 });
                 photoUrls.push(result.secure_url);
                 console.log('Photo uploaded successfully:', result.public_id);
                 
-                // Clean up local file
-                await safeUnlink(file.path);
-                
             } catch (uploadError) {
                 console.error('Error uploading individual photo:', uploadError);
-                // Clean up any local files
-                await safeUnlink(file.path);
-                
                 // If we already uploaded some photos, we should continue
                 // but log the error
                 console.log('Continuing with remaining uploads...');
@@ -342,20 +321,16 @@ exports.updateFacility = catchAsync(async (req, res, next) => {
             
             for (const file of req.files) {
                 try {
-                    console.log('Uploading new photo:', file.originalname);
-                    const result = await cloudinary.uploader.upload(file.path, {
+                    console.log('Uploading new photo buffer:', file.originalname);
+                    const result = await cloudinary.uploader.upload(`data:${file.mimetype};base64,${file.buffer.toString('base64')}`, {
                         folder: 'quickcourt/facilities',
                         resource_type: 'auto'
                     });
                     newPhotoUrls.push(result.secure_url);
                     console.log('New photo uploaded:', result.public_id);
                     
-                    // Clean up local file
-                    await safeUnlink(file.path);
-                    
                 } catch (uploadError) {
                     console.error('Error uploading new photo:', uploadError);
-                    await safeUnlink(file.path);
                     
                     // Return error for photo upload issues
                     return res.status(500).json({ 
@@ -399,13 +374,6 @@ exports.updateFacility = catchAsync(async (req, res, next) => {
 
     } catch (error) {
         console.error('Error during facility update:', error);
-        
-        // Clean up any local files that might still exist
-        if (req.files) {
-            for (const file of req.files) {
-                await safeUnlink(file.path);
-            }
-        }
         
         return res.status(500).json({
             success: false,
