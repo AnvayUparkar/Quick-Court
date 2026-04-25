@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getOwnerFacilities, createFacility, updateFacility, deleteFacility } from '../../api';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { PencilSquareIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../contexts/DataContext';
 import Loader from '../../components/shared/Loader'; // Import the Loader component
@@ -125,6 +125,21 @@ const FacilityManagementPage = () => {
         } catch {
             return false;
         }
+    };
+
+    const handleRemovePhoto = (urlToRemove) => {
+        const updatedUrls = formData.currentPhotoUrls.filter(url => url !== urlToRemove);
+        
+        let newPrimaryPhotoUrl = formData.primaryPhotoUrl;
+        if (formData.primaryPhotoUrl === urlToRemove) {
+            newPrimaryPhotoUrl = updatedUrls.length > 0 ? updatedUrls[0] : '';
+        }
+        
+        setFormData({
+            ...formData,
+            currentPhotoUrls: updatedUrls,
+            primaryPhotoUrl: newPrimaryPhotoUrl
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -504,9 +519,21 @@ const FacilityManagementPage = () => {
                                                             alt={`Facility ${index + 1}`}
                                                             className={`w-16 h-16 object-cover rounded border cursor-pointer ${formData.primaryPhotoUrl === url ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-300'}`}
                                                             onClick={() => setFormData({ ...formData, primaryPhotoUrl: url })}
+                                                            title="Click to set as primary photo"
                                                         />
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleRemovePhoto(url);
+                                                            }}
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 shadow hover:bg-red-600 transition-colors"
+                                                            title="Remove photo"
+                                                        >
+                                                            <XMarkIcon className="h-3 w-3" />
+                                                        </button>
                                                         {formData.primaryPhotoUrl === url && (
-                                                            <span className="absolute top-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs">
+                                                            <span className="absolute bottom-0 left-0 right-0 bg-blue-500 text-white text-[10px] text-center py-0.5 opacity-90 rounded-b">
                                                                 Primary
                                                             </span>
                                                         )}
